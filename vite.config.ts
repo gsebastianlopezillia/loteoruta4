@@ -3,8 +3,9 @@
   import react from '@vitejs/plugin-react-swc';
   import path from 'path';
 
-  export default defineConfig({
-    plugins: [react()],
+export default defineConfig({
+  base: './',
+  plugins: [react()],
     resolve: {
       extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
       alias: {
@@ -54,8 +55,13 @@
       },
     },
     build: {
-      target: 'esnext',
+      target: 'es2015',
       outDir: 'build',
+      rollupOptions: {
+        output: {
+          manualChunks: undefined,
+        }
+      },
     },
     server: {
       port: 3000,

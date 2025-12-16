@@ -4,7 +4,6 @@ import { LoteCard } from './components/LoteCard';
 import { BenefitCard } from './components/BenefitCard';
 import { StickyNav } from './components/StickyNav';
 import { FAQItem } from './components/FAQItem';
-import { PriceConverter } from './components/PriceConverter';
 import { Button } from './components/ui/button';
 import { Badge } from './components/ui/badge';
 import { 
@@ -27,106 +26,25 @@ import vistaDrone from 'figma:asset/8ab312c23624e8532d8f21bf366893fe3bf6de41.png
 import monteNativo from 'figma:asset/36258daf753f34ac4ad44c269f81cd5d94ff1c69.png';
 import caminoInterno from 'figma:asset/a88179b02412248a30eab613b5152c20b7084a15.png';
 
-// Nuevas imágenes del carrusel
-import loteoVistaGeneral1 from './assets/loteo_vista_general_1.jpeg';
-import loteoVistaAerea2 from './assets/loteo_vista_aerea_2.jpeg';
-import loteoCaminosInternos3 from './assets/loteo_caminos_internos_3.jpeg';
-import loteoMonteNativo4 from './assets/loteo_monte_nativo_4.jpeg';
-import loteoAccesoPrincipal5 from './assets/loteo_acceso_principal_5.jpeg';
-import loteoViasCirculacion6 from './assets/loteo_vias_circulacion_6.jpeg';
-import loteoSenderosPeatonales7 from './assets/loteo_senderos_peatonales_7.jpeg';
-import loteoZonasComunes8 from './assets/loteo_zonas_comunes_8.jpeg';
-import loteoAreaVerde9 from './assets/loteo_area_verde_9.jpeg';
-import loteoBiodiversidad10 from './assets/loteo_biodiversidad_10.jpeg';
-import loteoEspaciosNaturales11 from './assets/loteo_espacios_naturales_11.jpeg';
-import loteoUbicacionEstrategica12 from './assets/loteo_ubicacion_estrategica_12.jpeg';
-
 const galleryImages = [
-  // Grupo 1 (imágenes 1-4): "Ruta 4 asfaltada y naturaleza en perfecta armonía"
   {
-    url: loteoVistaGeneral1,
+    url: vistaDrone,
     title: 'Vista aérea del loteo',
     description: 'Ruta 4 asfaltada y naturaleza en perfecta armonía'
   },
   {
-    url: loteoVistaAerea2,
-    title: 'Vista desde la ruta',
-    description: 'Ruta 4 asfaltada y naturaleza en perfecta armonía'
-  },
-  {
-    url: loteoCaminosInternos3,
-    title: 'Acceso principal',
-    description: 'Ruta 4 asfaltada y naturaleza en perfecta armonía'
-  },
-  {
-    url: loteoMonteNativo4,
-    title: 'Entrada al complejo',
-    description: 'Ruta 4 asfaltada y naturaleza en perfecta armonía'
-  },
-
-  // Grupo 2 (imágenes 5-8): "Accesos mantenidos y delimitados entre lotes"
-  {
-    url: loteoAccesoPrincipal5,
+    url: caminoInterno,
     title: 'Caminos internos',
     description: 'Accesos mantenidos y delimitados entre lotes'
   },
   {
-    url: loteoViasCirculacion6,
-    title: 'Vías de circulación',
-    description: 'Accesos mantenidos y delimitados entre lotes'
-  },
-  {
-    url: loteoSenderosPeatonales7,
-    title: 'Senderos peatonales',
-    description: 'Accesos mantenidos y delimitados entre lotes'
-  },
-  {
-    url: loteoZonasComunes8,
-    title: 'Zonas comunes',
-    description: 'Accesos mantenidos y delimitados entre lotes'
-  },
-
-  // Grupo 3 (imágenes 9-12): "Vegetación autóctona y flores silvestres"
-  {
-    url: loteoAreaVerde9,
+    url: monteNativo,
     title: 'Monte nativo recuperado',
     description: 'Vegetación autóctona y flores silvestres'
   },
   {
-    url: loteoBiodiversidad10,
-    title: 'Área verde protegida',
-    description: 'Vegetación autóctona y flores silvestres'
-  },
-  {
-    url: loteoEspaciosNaturales11,
-    title: 'Biodiversidad local',
-    description: 'Vegetación autóctona y flores silvestres'
-  },
-  {
-    url: loteoUbicacionEstrategica12,
-    title: 'Espacios naturales',
-    description: 'Vegetación autóctona y flores silvestres'
-  },
-
-  // Grupo 4 (imágenes 13-16): "Vista general del proyecto y ubicación privilegiada"
-  {
-    url: loteoVistaGeneral1,
+    url: heroImage,
     title: 'Perspectiva completa',
-    description: 'Vista general del proyecto y ubicación privilegiada'
-  },
-  {
-    url: loteoAccesoPrincipal5,
-    title: 'Ubicación estratégica',
-    description: 'Vista general del proyecto y ubicación privilegiada'
-  },
-  {
-    url: loteoAreaVerde9,
-    title: 'Entorno residencial',
-    description: 'Vista general del proyecto y ubicación privilegiada'
-  },
-  {
-    url: loteoUbicacionEstrategica12,
-    title: 'Proyecto terminado',
     description: 'Vista general del proyecto y ubicación privilegiada'
   }
 ];
@@ -157,7 +75,7 @@ const lotes = [
   {
     numero: 10,
     superficie: '1000 mts²',
-    precioUSD: 5000,
+    precio: '$ 4.500.000',
     dimensiones: '12x80',
     forma: 'rectangular' as const,
     estado: 'disponible' as const
@@ -165,15 +83,15 @@ const lotes = [
   {
     numero: 11,
     superficie: '1000 mts²',
-    precioUSD: 5000,
+    precio: '$ 4.500.000',
     dimensiones: '12x80',
     forma: 'rectangular' as const,
-    estado: 'vendido' as const
+    estado: 'disponible' as const
   },
   {
     numero: 12,
     superficie: '1000 mts²',
-    precioUSD: 5000,
+    precio: '$ 4.500.000',
     dimensiones: '12x80',
     forma: 'rectangular' as const,
     estado: 'disponible' as const
@@ -181,7 +99,7 @@ const lotes = [
   {
     numero: 13,
     superficie: '1000 mts²',
-    precioUSD: 5000,
+    precio: '$ 4.500.000',
     dimensiones: '12x80',
     forma: 'rectangular' as const,
     estado: 'disponible' as const
@@ -189,7 +107,7 @@ const lotes = [
   {
     numero: 14,
     superficie: '1000 mts²',
-    precioUSD: 6000,
+    precio: '$ 4.500.000',
     dimensiones: '12x80',
     forma: 'rectangular' as const,
     estado: 'disponible' as const
@@ -198,7 +116,7 @@ const lotes = [
   {
     numero: 1,
     superficie: '1000 mts²',
-    precioUSD: 5000,
+    precio: '$ 4.500.000',
     dimensiones: '17x20x17',
     forma: 'triangular' as const,
     estado: 'vendido' as const
@@ -206,7 +124,7 @@ const lotes = [
   {
     numero: 2,
     superficie: '1000 mts²',
-    precioUSD: 5000,
+    precio: '$ 4.500.000',
     dimensiones: '12x80',
     forma: 'rectangular' as const,
     estado: 'vendido' as const
@@ -214,7 +132,7 @@ const lotes = [
   {
     numero: 3,
     superficie: '1000 mts²',
-    precioUSD: 5000,
+    precio: '$ 4.500.000',
     dimensiones: '12x80',
     forma: 'rectangular' as const,
     estado: 'vendido' as const
@@ -222,7 +140,7 @@ const lotes = [
   {
     numero: 4,
     superficie: '1000 mts²',
-    precioUSD: 5000,
+    precio: '$ 4.500.000',
     dimensiones: '12x80',
     forma: 'rectangular' as const,
     estado: 'vendido' as const
@@ -230,7 +148,7 @@ const lotes = [
   {
     numero: 5,
     superficie: '1000 mts²',
-    precioUSD: 5000,
+    precio: '$ 4.500.000',
     dimensiones: '12x80',
     forma: 'rectangular' as const,
     estado: 'vendido' as const
@@ -238,7 +156,7 @@ const lotes = [
   {
     numero: 6,
     superficie: '1000 mts²',
-    precioUSD: 5000,
+    precio: '$ 4.500.000',
     dimensiones: '12x80',
     forma: 'rectangular' as const,
     estado: 'vendido' as const
@@ -246,7 +164,7 @@ const lotes = [
   {
     numero: 7,
     superficie: '1000 mts²',
-    precioUSD: 5000,
+    precio: '$ 4.500.000',
     dimensiones: '12x80',
     forma: 'rectangular' as const,
     estado: 'vendido' as const
@@ -254,7 +172,7 @@ const lotes = [
   {
     numero: 8,
     superficie: '1000 mts²',
-    precioUSD: 5000,
+    precio: '$ 4.500.000',
     dimensiones: '12x80',
     forma: 'rectangular' as const,
     estado: 'vendido' as const
@@ -262,7 +180,7 @@ const lotes = [
   {
     numero: 9,
     superficie: '1000 mts²',
-    precioUSD: 5000,
+    precio: '$ 4.500.000',
     dimensiones: '12x80',
     forma: 'rectangular' as const,
     estado: 'vendido' as const
@@ -353,10 +271,12 @@ export default function App() {
         <div className={`relative z-10 container mx-auto px-4 text-center transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <h1 className="text-[72px] md:text-[100px] leading-[1.2] text-[#FFFFFF] mb-6 max-w-5xl mx-auto" style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 700, letterSpacing: '0.5px', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
             Tu terreno de 1000m2 en Misiones desde{' '}
-            <span className="text-transparent" style={{ color: '#27AE60' }}>U$D 5.000</span>
+            <span className="text-transparent" style={{ WebkitTextStroke: '2px #27AE60' }}>$4.500.000</span>
           </h1>
 
-        
+          <p className="text-[24px] text-[#E0E0E0] mb-2" style={{ fontFamily: 'Open Sans, sans-serif', lineHeight: '1.6', fontWeight: 300 }}>
+            USD 3,200
+          </p>
 
           <p className="text-[20px] text-[#FFFFFF] mb-8 max-w-3xl mx-auto" style={{ fontFamily: 'Open Sans, sans-serif', lineHeight: '1.6' }}>
             con Título, Asfalto, Agua
@@ -371,7 +291,9 @@ export default function App() {
             RESERVAR MI LOTE
           </Button>
 
-
+          <p className="mt-8 text-[16px] text-[#A0A0A0]" style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 300, lineHeight: '1.5' }}>
+            Solo quedan {lotesDisponibles} lotes a este precio exclusivo
+          </p>
         </div>
 
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
@@ -387,7 +309,9 @@ export default function App() {
               ¿Harto de ver tu plata evaporarse en alquiler o inflación en la ciudad?
             </h2>
             <p className="animate-on-scroll text-[18px] text-[#E0E0E0] leading-relaxed" style={{ fontFamily: 'Open Sans, sans-serif', lineHeight: '1.6', maxWidth: '800px', margin: '0 auto', padding: '20px' }}>
-              Imaginate jubilado o trabajando remote en tu propio paraíso: monte nativo fresco, arroyo a 200m para refrescarte, <span className="text-[#27AE60]">1000m² que parecen un reino</span> (gigante para citadinos, ideal para casa familiar o inversión).
+              Imaginate jubilado o trabajando remote en tu propio paraíso: monte nativo fresco, 
+              arroyo a 200m para refrescarte, <span className="text-[#27AE60]">1000m² que parecen un reino</span> (gigante 
+              para citadinos, ideal para casa familiar o inversión).
             </p>
             <div className="animate-on-scroll pt-6 space-y-4 text-left bg-[#121212] p-8 rounded-lg border border-[#333]">
               <h3 className="text-[32px] text-[#27AE60]" style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 500, letterSpacing: '0.2px' }}>Garantías absolutas:</h3>
@@ -410,7 +334,7 @@ export default function App() {
                 </li>
                 <li className="flex items-start gap-3">
                   <MapPin className="size-5 text-[#27AE60] mt-1 flex-shrink-0" />
-                  <span>4km de Bonpland y 15km de Alem - Cerca de todo sin ruido</span>
+                  <span>4km de Bonpland y 15km de Oberá - Cerca de todo sin ruido</span>
                 </li>
               </ul>
             </div>
@@ -443,21 +367,21 @@ export default function App() {
               Ubicación <span className="text-[#27AE60]">Privilegiada</span>
             </h2>
             <p className="animate-on-scroll text-[18px] text-[#E0E0E0]" style={{ fontFamily: 'Open Sans, sans-serif', lineHeight: '1.6' }}>
-              Ruta 4 km14, N3370 Almafuerte, Misiones - El equilibrio perfecto entre naturaleza y conectividad
+              Ruta Provincial 4, Almafuerte, Misiones - El equilibrio perfecto entre naturaleza y conectividad
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8 items-start">
             <div className="animate-on-scroll bg-[#121212] rounded-xl overflow-hidden border border-[#2a2a2a] h-[450px] shadow-xl">
               <iframe
-                src="https://maps.google.com/maps?q=Loteo+Ruta+4,+Ruta+4+km14,+N3370+Almafuerte,+Misiones,+Argentina&output=embed"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3538.2!2d-55.40361!3d-27.50806!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjfCsDMwJzI5LjAiUyA1NcKwMjQnMTMuMCJX!5e0!3m2!1ses!2sar!4v1234567890"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                title="Ubicación Loteo Ruta 4 - Ruta 4 km14, Almafuerte, Misiones"
+                title="Ubicación Loteo Ruta 4"
               />
             </div>
 
@@ -484,7 +408,7 @@ export default function App() {
                   <div>
                     <h3 className="text-[#FFFFFF] mb-2 text-[20px]" style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 600, letterSpacing: '0.3px' }}>A 150m de escuela y parada de colectivo</h3>
                     <p className="text-[16px] text-[#D0D0D0]" style={{ fontFamily: 'Open Sans, sans-serif', lineHeight: '1.5' }}>
-                      Ideal para familias con niños o proyectos comunitarios
+                      Ideal para familias con nios o proyectos comunitarios
                     </p>
                   </div>
                 </div>
@@ -496,7 +420,7 @@ export default function App() {
                     <Droplets className="size-6 text-[#27AE60] flex-shrink-0" />
                   </div>
                   <div>
-                    <h3 className="text-[#FFFFFF] mb-2 text-[20px]" style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 600, letterSpacing: '0.3px' }}>200m de arroyo</h3>
+                    <h3 className="text-[#FFFFFF] mb-2 text-[20px]" style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 600, letterSpacing: '0.3px' }}>200m de arroyo cristalino</h3>
                     <p className="text-[16px] text-[#D0D0D0]" style={{ fontFamily: 'Open Sans, sans-serif', lineHeight: '1.5' }}>
                       Naturaleza pura para refrescarte y conectar con el entorno
                     </p>
@@ -510,7 +434,7 @@ export default function App() {
                     <Building2 className="size-6 text-[#27AE60] flex-shrink-0" />
                   </div>
                   <div>
-                    <h3 className="text-[#FFFFFF] mb-2 text-[20px]" style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 600, letterSpacing: '0.3px' }}>4km de Bonpland, 15km de Alem</h3>
+                    <h3 className="text-[#FFFFFF] mb-2 text-[20px]" style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 600, letterSpacing: '0.3px' }}>4km de Bonpland, 15km de Oberá</h3>
                     <p className="text-[16px] text-[#D0D0D0]" style={{ fontFamily: 'Open Sans, sans-serif', lineHeight: '1.5' }}>
                       Cerca de servicios y comercios sin el ruido de la ciudad
                     </p>
@@ -546,7 +470,7 @@ export default function App() {
                 <LoteCard
                   numero={lote.numero}
                   superficie={lote.superficie}
-                  precioUSD={lote.precioUSD}
+                  precio={lote.precio}
                   dimensiones={lote.dimensiones}
                   forma={lote.forma}
                   estado={lote.estado}
@@ -554,24 +478,6 @@ export default function App() {
               </div>
             ))}
           </div>
-
-          {showAllLotes && lotes.length > 4 && (
-            <div className="flex justify-center mt-12">
-              <Button
-                onClick={() => setShowAllLotes(false)}
-                className="bg-transparent border-2 border-[#666] text-[#666] hover:bg-[#666] hover:text-white px-12 py-6 transition-all duration-300 hover:scale-105"
-                style={{
-                  borderRadius: '8px',
-                  fontSize: '18px',
-                  fontFamily: 'Montserrat, sans-serif',
-                  fontWeight: 600,
-                  letterSpacing: '0.5px'
-                }}
-              >
-                Ver menos
-              </Button>
-            </div>
-          )}
 
           {!showAllLotes && lotes.length > 4 && (
             <div className="flex justify-center mt-12">
@@ -845,17 +751,17 @@ export default function App() {
             <div className="animate-on-scroll">
               <FAQItem question="¿Dónde quedan exactamente los lotes?">
                 <p className="mb-3">
-                  Quedan sobre <strong className="text-[#27AE60]">Ruta 4 km14</strong>, N3370 Almafuerte, Misiones (a 5 km de Bonpland y 15 km de Leandro N. Alem, por la escuela Almafuerte, ex Escuela 629).
+                  Quedan sobre <strong className="text-[#27AE60]">Ruta Nacional 4</strong>, a 5 km de Bonpland y 15 km de Leandro N. Alem (por la escuela Almafuerte, ex Escuela 629).
                 </p>
                 <p className="mb-3">
                   <strong>Ubicación exacta:</strong><br />
-                  <a
-                    href="https://maps.app.goo.gl/sSkYjNAtNqYEJhyPA"
-                    target="_blank"
+                  <a 
+                    href="https://maps.app.goo.gl/wkT1nT3xwwUx5bVa8" 
+                    target="_blank" 
                     rel="noopener noreferrer"
                     className="text-[#27AE60] hover:underline"
                   >
-                    https://maps.app.goo.gl/sSkYjNAtNqYEJhyPA
+                    https://maps.app.goo.gl/wkT1nT3xwwUx5bVa8
                   </a>
                 </p>
                 <p>

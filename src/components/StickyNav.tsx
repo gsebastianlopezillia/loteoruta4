@@ -48,7 +48,7 @@ export function StickyNav() {
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled ? 'bg-[#121212]/95 backdrop-blur-lg shadow-xl' : 'bg-[#121212]/80 backdrop-blur-sm'
       }`}
-      style={{ borderBottom: '1px solid #2a2a2a', display: 'contents' }}
+      style={{ borderBottom: '1px solid #2a2a2a' }}
     >
       <div className="container mx-auto max-w-7xl px-4">
         <div className="flex items-center justify-between h-16">
