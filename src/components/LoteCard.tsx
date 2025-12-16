@@ -1,17 +1,19 @@
 import { useState } from 'react';
+import { useCurrencyConversion } from '../hooks/useCurrencyConversion';
 
 interface LoteCardProps {
   numero: number;
   superficie: string;
-  precio: string;
+  precioUSD: number; // Precio en dólares
   dimensiones: string;
   forma: 'triangular' | 'rectangular';
   estado: 'disponible' | 'vendido';
 }
 
-export function LoteCard({ numero, superficie, precio, dimensiones, forma, estado }: LoteCardProps) {
+export function LoteCard({ numero, superficie, precioUSD, dimensiones, forma, estado }: LoteCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const isDisponible = estado === 'disponible';
+  const { getPriceInARS, formatCurrency, loading } = useCurrencyConversion(precioUSD);
 
   // SVG Icon para forma triangular con perspectiva isométrica 2D
   const TriangularIcon = () => (
@@ -129,16 +131,9 @@ export function LoteCard({ numero, superficie, precio, dimensiones, forma, estad
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Banda diagonal VENDIDO */}
+      {/* Texto VENDIDO */}
       {!isDisponible && (
         <>
-          {/* Fondo de la banda */}
-          <div 
-            className="absolute inset-0 z-10 pointer-events-none"
-            style={{
-              background: 'linear-gradient(45deg, transparent 43%, rgba(220, 53, 69, 0.15) 43%, rgba(220, 53, 69, 0.15) 57%, transparent 57%)',
-            }}
-          />
           {/* Texto VENDIDO */}
           <div className="absolute inset-0 z-20 pointer-events-none flex items-center justify-center">
             <div 
@@ -192,17 +187,28 @@ export function LoteCard({ numero, superficie, precio, dimensiones, forma, estad
           </p>
 
           {/* Precio */}
-          <p 
-            className={isDisponible ? 'text-[#27AE60]' : 'text-[#707070]'}
-            style={{
-              fontFamily: 'Montserrat, sans-serif',
-              fontWeight: 700,
-              fontSize: '28px',
-              letterSpacing: '0.5px'
-            }}
-          >
-            {precio}
-          </p>
+          <div>
+            <p
+              className={isDisponible ? 'text-[#27AE60]' : 'text-[#707070]'}
+              style={{
+                fontFamily: 'Montserrat, sans-serif',
+                fontWeight: 700,
+                fontSize: '28px',
+                letterSpacing: '0.5px'
+              }}
+            >
+              {loading ? 'Cargando...' : formatCurrency(getPriceInARS('blue'))}
+            </p>
+            <p
+              className={`text-xs mt-1 ${isDisponible ? 'text-[#888888]' : 'text-[#606060]'}`}
+              style={{
+                fontFamily: 'Open Sans, sans-serif',
+                fontWeight: 300
+              }}
+            >
+              ≈ ${precioUSD.toLocaleString()} USD
+            </p>
+          </div>
 
           {/* Dimensiones alineadas con el precio */}
           <p 
