@@ -58,7 +58,9 @@
       "scripts": {
             "dev": "vite",
             "build": "vite build",
+            "build:verify": "npm run build && node scripts/verify-build.js",
             "predeploy": "npm run build && cp .nojekyll build/",
-            "deploy": "gh-pages -d build"
+            "deploy": "gh-pages -d build",
+            "preview": "vite preview"
       }
 }

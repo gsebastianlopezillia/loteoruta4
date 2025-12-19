@@ -33,30 +33,41 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Copy .nojekyll to build
+        run: |
+          if [ -f ".nojekyll" ]; then
+            cp .nojekyll build/
+            echo "Copied .nojekyll file"
+          else
+            touch build/.nojekyll
+            echo "Created .nojekyll file"
+          fi
+
       - name: Copy public files to build
         run: |
           if [ -d "public" ]; then
-            cp -r public/* build/ 2>/dev/null || true
-            echo "Copied public files to build directory"
+            echo "Copying files from public/ to build/"
+            cp -v public/manifest.json build/ 2>&1 || echo "manifest.json copy failed"
+            cp -v public/favicon.svg build/ 2>&1 || echo "favicon.svg copy failed"
+            cp -v public/robots.txt build/ 2>&1 || echo "robots.txt copy failed"
+            cp -v public/sitemap.xml build/ 2>&1 || echo "sitemap.xml copy failed"
+            echo "Finished copying public files"
           else
             echo "Public directory not found"
           fi
 
       - name: Verify build output
         run: |
-          echo "Build directory contents:"
-          ls -la build/ | head -20
+          echo "=== Build directory contents ==="
+          ls -la build/ | head -25
           echo ""
-          echo "Checking for public files:"
+          echo "=== Checking for required files ==="
+          test -f build/.nojekyll && echo "✓ .nojekyll exists" || echo "✗ .nojekyll missing"
           test -f build/manifest.json && echo "✓ manifest.json exists" || echo "✗ manifest.json missing"
           test -f build/favicon.svg && echo "✓ favicon.svg exists" || echo "✗ favicon.svg missing"
           test -f build/robots.txt && echo "✓ robots.txt exists" || echo "✗ robots.txt missing"
           test -f build/sitemap.xml && echo "✓ sitemap.xml exists" || echo "✗ sitemap.xml missing"
-
-      - name: Ensure .nojekyll exists
-        run: |
-          touch build/.nojekyll
-          echo "Created .nojekyll file"
+          test -f build/index.html && echo "✓ index.html exists" || echo "✗ index.html missing"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
