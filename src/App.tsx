@@ -22,31 +22,79 @@ import {
   Building2,
   Phone
 } from 'lucide-react';
-import heroImage from 'figma:asset/906382584b6e2e56b243366dc274344613cd82b8.png';
-import vistaDrone from 'figma:asset/8ab312c23624e8532d8f21bf366893fe3bf6de41.png';
-import monteNativo from 'figma:asset/36258daf753f34ac4ad44c269f81cd5d94ff1c69.png';
-import caminoInterno from 'figma:asset/a88179b02412248a30eab613b5152c20b7084a15.png';
+import loteoVistaGeneral from './assets/loteo_vista_general_1.jpeg';
+import loteoVistaAerea from './assets/loteo_vista_aerea_2.jpeg';
+import loteoCaminosInternos from './assets/loteo_caminos_internos_3.jpeg';
+import loteoMonteNativo from './assets/loteo_monte_nativo_4.jpeg';
+import loteoAccesoPrincipal from './assets/loteo_acceso_principal_5.jpeg';
+import loteoViasCirculacion from './assets/loteo_vias_circulacion_6.jpeg';
+import loteoSenderosPeatonales from './assets/loteo_senderos_peatonales_7.jpeg';
+import loteoZonasComunes from './assets/loteo_zonas_comunes_8.jpeg';
+import loteoAreaVerde from './assets/loteo_area_verde_9.jpeg';
+import loteoBiodiversidad from './assets/loteo_biodiversidad_10.jpeg';
+import loteoEspaciosNaturales from './assets/loteo_espacios_naturales_11.jpeg';
+import loteoUbicacionEstrategica from './assets/loteo_ubicacion_estrategica_12.jpeg';
 
 const galleryImages = [
   {
-    url: vistaDrone,
+    url: loteoVistaGeneral,
+    title: 'Vista general del loteo',
+    description: 'Perspectiva completa del proyecto Ruta 4 y su ubicación privilegiada'
+  },
+  {
+    url: loteoVistaAerea,
     title: 'Vista aérea del loteo',
-    description: 'Ruta 4 asfaltada y naturaleza en perfecta armonía'
+    description: 'Ruta 4 asfaltada y naturaleza en perfecta armonía desde las alturas'
   },
   {
-    url: caminoInterno,
+    url: loteoCaminosInternos,
     title: 'Caminos internos',
-    description: 'Accesos mantenidos y delimitados entre lotes'
+    description: 'Accesos mantenidos y delimitados entre lotes para facilitar la circulación'
   },
   {
-    url: monteNativo,
+    url: loteoMonteNativo,
     title: 'Monte nativo recuperado',
-    description: 'Vegetación autóctona y flores silvestres'
+    description: 'Vegetación autóctona y flores silvestres en plena recuperación'
   },
   {
-    url: heroImage,
-    title: 'Perspectiva completa',
-    description: 'Vista general del proyecto y ubicación privilegiada'
+    url: loteoAccesoPrincipal,
+    title: 'Acceso principal',
+    description: 'Entrada principal al loteo con diseño integrado al paisaje natural'
+  },
+  {
+    url: loteoViasCirculacion,
+    title: 'Vías de circulación',
+    description: 'Sistema completo de vías pavimentadas para acceso vehicular'
+  },
+  {
+    url: loteoSenderosPeatonales,
+    title: 'Senderos peatonales',
+    description: 'Caminos peatonales que conectan los lotes con zonas comunes'
+  },
+  {
+    url: loteoZonasComunes,
+    title: 'Zonas comunes',
+    description: 'Áreas recreativas compartidas para el disfrute de todos los propietarios'
+  },
+  {
+    url: loteoAreaVerde,
+    title: 'Área verde',
+    description: 'Espacios verdes preservados para mantener el equilibrio ecológico'
+  },
+  {
+    url: loteoBiodiversidad,
+    title: 'Biodiversidad',
+    description: 'Diversidad de especies nativas protegidas y fomentadas'
+  },
+  {
+    url: loteoEspaciosNaturales,
+    title: 'Espacios naturales',
+    description: 'Reservas naturales que mantienen la esencia del entorno original'
+  },
+  {
+    url: loteoUbicacionEstrategica,
+    title: 'Ubicación estratégica',
+    description: 'Posición privilegiada con acceso directo a la Ruta 4 asfaltada'
   }
 ];
 
@@ -266,7 +314,7 @@ export default function App() {
         <div 
           className="absolute inset-0 bg-cover bg-center ken-burns"
           style={{
-            backgroundImage: `url(${heroImage})`,
+            backgroundImage: `url(${loteoVistaGeneral})`,
             backgroundAttachment: 'fixed',
           }}
         >
