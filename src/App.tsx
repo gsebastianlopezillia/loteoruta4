@@ -3,6 +3,7 @@ import { CountdownTimer } from './components/CountdownTimer';
 import { LoteCard } from './components/LoteCard';
 import { BenefitCard } from './components/BenefitCard';
 import { StickyNav } from './components/StickyNav';
+import { useCurrencyConversion } from './hooks/useCurrencyConversion';
 import { FAQItem } from './components/FAQItem';
 import { Button } from './components/ui/button';
 import { Badge } from './components/ui/badge';
@@ -86,7 +87,7 @@ const lotes = [
     precio: '$ 4.500.000',
     dimensiones: '12x80',
     forma: 'rectangular' as const,
-    estado: 'disponible' as const
+    estado: 'vendido' as const
   },
   {
     numero: 12,
@@ -214,6 +215,7 @@ export default function App() {
   const [isVisible, setIsVisible] = useState(false);
   const [showAllLotes, setShowAllLotes] = useState(false);
   const [currentTestimonialIndex, setCurrentTestimonialIndex] = useState(0);
+  const { getPriceInARS, formatCurrency, loading } = useCurrencyConversion(5000);
 
   useScrollAnimation();
 
@@ -240,7 +242,10 @@ export default function App() {
     <div className="min-h-screen bg-[#0a0a0a] text-[#FFFFFF]" style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: '16px' }}>
       {/* Navegación Sticky */}
       <StickyNav />
-      
+
+      {/* Espacio para compensar header sticky */}
+      <div className="h-16 bg-[#0a0a0a]"></div>
+
       {/* Banner Superior Animado */}
       <div className="bg-gradient-to-r from-[#004D40] via-[#27AE60] to-[#004D40] overflow-hidden relative shadow-lg" style={{ height: '58px', display: 'flex', alignItems: 'center' }}>
         <div className="animate-scroll whitespace-nowrap">
@@ -271,11 +276,11 @@ export default function App() {
         <div className={`relative z-10 container mx-auto px-4 text-center transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <h1 className="text-[72px] md:text-[100px] leading-[1.2] text-[#FFFFFF] mb-6 max-w-5xl mx-auto" style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 700, letterSpacing: '0.5px', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
             Tu terreno de 1000m2 en Misiones desde{' '}
-            <span className="text-transparent" style={{ WebkitTextStroke: '2px #27AE60' }}>$4.500.000</span>
+            <span className="text-[#27AE60]">{loading ? '$7.350.000' : formatCurrency(getPriceInARS('blue'))}</span>
           </h1>
 
           <p className="text-[24px] text-[#E0E0E0] mb-2" style={{ fontFamily: 'Open Sans, sans-serif', lineHeight: '1.6', fontWeight: 300 }}>
-            USD 3,200
+            USD 5,000
           </p>
 
           <p className="text-[20px] text-[#FFFFFF] mb-8 max-w-3xl mx-auto" style={{ fontFamily: 'Open Sans, sans-serif', lineHeight: '1.6' }}>
@@ -374,7 +379,7 @@ export default function App() {
           <div className="grid md:grid-cols-2 gap-8 items-start">
             <div className="animate-on-scroll bg-[#121212] rounded-xl overflow-hidden border border-[#2a2a2a] h-[450px] shadow-xl">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3538.2!2d-55.40361!3d-27.50806!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjfCsDMwJzI5LjAiUyA1NcKwMjQnMTMuMCJX!5e0!3m2!1ses!2sar!4v1234567890"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3538.2!2d-55.448548!3d-27.523444!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjfCsDMxJzI0LjQiUyA1NcKwMjYnNTQuNSJX!5e0!3m2!1ses!2sar!4v1234567890"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
@@ -420,7 +425,7 @@ export default function App() {
                     <Droplets className="size-6 text-[#27AE60] flex-shrink-0" />
                   </div>
                   <div>
-                    <h3 className="text-[#FFFFFF] mb-2 text-[20px]" style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 600, letterSpacing: '0.3px' }}>200m de arroyo cristalino</h3>
+                    <h3 className="text-[#FFFFFF] mb-2 text-[20px]" style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 600, letterSpacing: '0.3px' }}>200m de arroyo</h3>
                     <p className="text-[16px] text-[#D0D0D0]" style={{ fontFamily: 'Open Sans, sans-serif', lineHeight: '1.5' }}>
                       Naturaleza pura para refrescarte y conectar con el entorno
                     </p>
@@ -470,7 +475,7 @@ export default function App() {
                 <LoteCard
                   numero={lote.numero}
                   superficie={lote.superficie}
-                  precio={lote.precio}
+                  precioUSD={lote.numero === 14 ? 6000 : 5000}
                   dimensiones={lote.dimensiones}
                   forma={lote.forma}
                   estado={lote.estado}
