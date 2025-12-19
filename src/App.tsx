@@ -3,6 +3,9 @@ import { CountdownTimer } from './components/CountdownTimer';
 import { LoteCard } from './components/LoteCard';
 import { BenefitCard } from './components/BenefitCard';
 import { StickyNav } from './components/StickyNav';
+import { SEOHead } from './components/SEOHead';
+import { StructuredData } from './components/StructuredData';
+import { Analytics } from './components/Analytics';
 import { useCurrencyConversion } from './hooks/useCurrencyConversion';
 import { FAQItem } from './components/FAQItem';
 import { Button } from './components/ui/button';
@@ -287,28 +290,35 @@ export default function App() {
   const lotesDisponibles = lotes.filter(l => l.estado === 'disponible').length;
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-[#FFFFFF]" style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: '16px' }}>
-      {/* Navegación Sticky */}
-      <StickyNav />
+    <>
+      <SEOHead />
+      <StructuredData lotesDisponibles={lotesDisponibles} precioMinimoUSD={5000} />
+      <Analytics gaId={import.meta.env.VITE_GA_ID} gscVerification={import.meta.env.VITE_GSC_VERIFICATION} />
+      <div className="min-h-screen bg-[#0a0a0a] text-[#FFFFFF]" style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: '16px' }}>
+      <header>
+        {/* Navegación Sticky */}
+        <StickyNav />
 
-      {/* Espacio para compensar header sticky */}
-      <div className="h-16 bg-[#0a0a0a]"></div>
+        {/* Espacio para compensar header sticky */}
+        <div className="h-16 bg-[#0a0a0a]"></div>
 
-      {/* Banner Superior Animado */}
-      <div className="bg-gradient-to-r from-[#004D40] via-[#27AE60] to-[#004D40] overflow-hidden relative shadow-lg" style={{ height: '58px', display: 'flex', alignItems: 'center' }}>
-        <div className="animate-scroll whitespace-nowrap">
-          <span className="inline-block px-8 text-white" style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 700, fontSize: '16px', letterSpacing: '0.5px' }}>
-            🔥 OFERTA LIMITADA: Comprando antes del 31/12/2025 el impuesto inmobiliario de TODO 2026 GRATIS 🔥
-          </span>
-          <span className="inline-block px-8 text-white" style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 700, fontSize: '16px', letterSpacing: '0.5px' }}>
-            🔥 OFERTA LIMITADA: Comprando antes del 31/12/2025 el impuesto inmobiliario de TODO 2026 GRATIS 🔥
-          </span>
-          <span className="inline-block px-8 text-white" style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 700, fontSize: '16px', letterSpacing: '0.5px' }}>
-            🔥 OFERTA LIMITADA: Comprando antes del 31/12/2025 el impuesto inmobiliario de TODO 2026 GRATIS 🔥
-          </span>
+        {/* Banner Superior Animado */}
+        <div className="bg-gradient-to-r from-[#004D40] via-[#27AE60] to-[#004D40] overflow-hidden relative shadow-lg" style={{ height: '58px', display: 'flex', alignItems: 'center' }}>
+          <div className="animate-scroll whitespace-nowrap">
+            <span className="inline-block px-8 text-white" style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 700, fontSize: '16px', letterSpacing: '0.5px' }}>
+              🔥 OFERTA LIMITADA: Comprando antes del <time dateTime="2025-12-31">31/12/2025</time> el impuesto inmobiliario de TODO 2026 GRATIS 🔥
+            </span>
+            <span className="inline-block px-8 text-white" style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 700, fontSize: '16px', letterSpacing: '0.5px' }}>
+              🔥 OFERTA LIMITADA: Comprando antes del <time dateTime="2025-12-31">31/12/2025</time> el impuesto inmobiliario de TODO 2026 GRATIS 🔥
+            </span>
+            <span className="inline-block px-8 text-white" style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 700, fontSize: '16px', letterSpacing: '0.5px' }}>
+              🔥 OFERTA LIMITADA: Comprando antes del <time dateTime="2025-12-31">31/12/2025</time> el impuesto inmobiliario de TODO 2026 GRATIS 🔥
+            </span>
+          </div>
         </div>
-      </div>
+      </header>
 
+      <main>
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         <div 
@@ -323,7 +333,7 @@ export default function App() {
 
         <div className={`relative z-10 container mx-auto px-4 text-center transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <h1 className="text-[72px] md:text-[100px] leading-[1.2] text-[#FFFFFF] mb-6 max-w-5xl mx-auto" style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 700, letterSpacing: '0.5px', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
-            Tu terreno de 1000m2 en Misiones desde{' '}
+            Loteo Ruta 4: Tu terreno de 1000m² en Misiones desde{' '}
             <span className="text-[#27AE60]">{loading ? '$7.350.000' : formatCurrency(getPriceInARS('blue'))}</span>
           </h1>
 
@@ -631,6 +641,9 @@ export default function App() {
                 src={galleryImages[currentImageIndex].url}
                 alt={galleryImages[currentImageIndex].title}
                 className="w-full h-full object-cover"
+                loading="eager"
+                width={1200}
+                height={500}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
@@ -686,6 +699,9 @@ export default function App() {
                   src={image.url}
                   alt={image.title}
                   className="w-full h-full object-cover"
+                  loading="lazy"
+                  width={200}
+                  height={96}
                 />
               </button>
             ))}
@@ -915,6 +931,7 @@ export default function App() {
           </div>
         </div>
       </section>
+      </main>
 
       {/* Footer */}
       <footer className="bg-[#000000] py-20 border-t border-[#2a2a2a]" id="contacto">
@@ -952,7 +969,7 @@ export default function App() {
                   ⏰ Impuesto 2026 GRATIS
                 </p>
                 <p className="text-[15px] text-[#D0D0D0]" style={{ fontFamily: 'Open Sans, sans-serif' }}>
-                  Válido solo hasta 31/12/2025
+                  Válido solo hasta <time dateTime="2025-12-31">31/12/2025</time>
                 </p>
               </div>
             </div>
@@ -963,7 +980,7 @@ export default function App() {
               © 2025 Loteo Ruta 4 - loteoruta4.com - Todos los derechos reservados
             </p>
             <p className="text-[14px] text-[#777777] mt-2" style={{ fontFamily: 'Open Sans, sans-serif' }}>
-              ¡No dejes que se escapen los lotes! Solo {lotesDisponibles} disponibles a este precio.
+              ¡No dejes que se escapen los lotes!
             </p>
           </div>
         </div>
@@ -980,5 +997,6 @@ export default function App() {
         <Phone className="size-6" />
       </a>
     </div>
+    </>
   );
 }

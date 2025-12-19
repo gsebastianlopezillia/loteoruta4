@@ -57,11 +57,22 @@ export default defineConfig({
     build: {
       target: 'es2015',
       outDir: 'build',
+      minify: 'terser',
+      terserOptions: {
+        compress: {
+          drop_console: true,
+          drop_debugger: true,
+        },
+      },
       rollupOptions: {
         output: {
-          manualChunks: undefined,
+          manualChunks: {
+            'react-vendor': ['react', 'react-dom'],
+            'ui-vendor': ['@radix-ui/react-accordion', '@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu'],
+          },
         }
       },
+      chunkSizeWarningLimit: 1000,
     },
     server: {
       port: 3000,
