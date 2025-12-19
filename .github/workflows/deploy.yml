@@ -33,8 +33,30 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Copy .nojekyll
-        run: cp .nojekyll build/
+      - name: Copy public files to build
+        run: |
+          if [ -d "public" ]; then
+            cp -r public/* build/ 2>/dev/null || true
+            echo "Copied public files to build directory"
+          else
+            echo "Public directory not found"
+          fi
+
+      - name: Verify build output
+        run: |
+          echo "Build directory contents:"
+          ls -la build/ | head -20
+          echo ""
+          echo "Checking for public files:"
+          test -f build/manifest.json && echo "✓ manifest.json exists" || echo "✗ manifest.json missing"
+          test -f build/favicon.svg && echo "✓ favicon.svg exists" || echo "✗ favicon.svg missing"
+          test -f build/robots.txt && echo "✓ robots.txt exists" || echo "✗ robots.txt missing"
+          test -f build/sitemap.xml && echo "✓ sitemap.xml exists" || echo "✗ sitemap.xml missing"
+
+      - name: Ensure .nojekyll exists
+        run: |
+          touch build/.nojekyll
+          echo "Created .nojekyll file"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

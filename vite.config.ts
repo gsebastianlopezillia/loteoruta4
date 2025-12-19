@@ -4,7 +4,7 @@
   import path from 'path';
 
 export default defineConfig({
-  base: './',
+  base: '/',
   plugins: [react()],
     resolve: {
       extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
@@ -73,6 +73,7 @@ export default defineConfig({
         }
       },
       chunkSizeWarningLimit: 1000,
+      copyPublicDir: true,
     },
     server: {
       port: 3000,
