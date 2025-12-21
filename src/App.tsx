@@ -103,22 +103,20 @@ const galleryImages = [
 
 const testimonials = [
   {
-    name: 'María',
-    photo: 'https://images.unsplash.com/photo-1629149979194-792705755857?w=200',
-    text: 'Compré 2 lotes para mi jubilación. ¡Título en mano, ruta asfaltada y paz total – la mejor decisión para escapar de la ciudad! Ya estoy planeando mi casita rodeada de verde.',
-    subtitle: '62 años, Directora de escuela jubilada - Buenos Aires'
+    text: 'El lote está ubicado en un lugar estratégico y accesible, de facil acceso a la ruta asfaltada y en auto. Conectando con la ciudad y otros puntos de interés. Ideal para vivienda y quinta y proyectos al aire libre',
+    subtitle: 'Directora de escuela - La Plata'
   },
   {
-    name: 'Carlos y Laura',
-    photo: 'https://images.unsplash.com/photo-1516467508483-a7212febe31a?w=200',
-    text: 'Somos un matrimonio que escapó de la locura urbana: trabajo remote con Starlink, huerta propia, tranquilidad total y ruta práctica – ¡este lugar es ideal!',
-    subtitle: 'Desarrolladores remotos - Ex residentes CABA'
-  },
-  {
-    name: 'Daniel',
-    photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200',
-    text: 'Un trámite super sencillo, un placer hacer negocio con los chicos',
+    text: 'Un trámite super sencillo, un placer hacer negocio con los chicos.',
     subtitle: 'Inversor - Buenos Aires'
+  },
+  {
+    text: 'Estoy muy feliz con el terreno, tengo varios frutales y buena sombra de los pinos para hacer mi cabañita.',
+    subtitle: 'Camionero - San Luis'
+  },
+  {
+    text: 'La parte alta del lote ofrece una vista única con panorámica de la zona verde de Almafuerte.',
+    subtitle: 'Particular - Posadas'
   }
 ];
 
@@ -127,7 +125,7 @@ const lotes = [
   {
     numero: 10,
     superficie: '1000 mts²',
-    precio: '$ 4.500.000',
+    precio: 5000,
     dimensiones: '12x80',
     forma: 'rectangular' as const,
     estado: 'disponible' as const
@@ -135,7 +133,7 @@ const lotes = [
   {
     numero: 11,
     superficie: '1000 mts²',
-    precio: '$ 4.500.000',
+    precio: 5000,
     dimensiones: '12x80',
     forma: 'rectangular' as const,
     estado: 'vendido' as const
@@ -143,7 +141,7 @@ const lotes = [
   {
     numero: 12,
     superficie: '1000 mts²',
-    precio: '$ 4.500.000',
+    precio: 5000,
     dimensiones: '12x80',
     forma: 'rectangular' as const,
     estado: 'disponible' as const
@@ -151,7 +149,7 @@ const lotes = [
   {
     numero: 13,
     superficie: '1000 mts²',
-    precio: '$ 4.500.000',
+    precio: 5000,
     dimensiones: '12x80',
     forma: 'rectangular' as const,
     estado: 'disponible' as const
@@ -159,7 +157,7 @@ const lotes = [
   {
     numero: 14,
     superficie: '1000 mts²',
-    precio: '$ 4.500.000',
+    precio: 6000,
     dimensiones: '12x80',
     forma: 'rectangular' as const,
     estado: 'disponible' as const
@@ -168,7 +166,7 @@ const lotes = [
   {
     numero: 1,
     superficie: '1000 mts²',
-    precio: '$ 4.500.000',
+    precio: 5000,
     dimensiones: '17x20x17',
     forma: 'triangular' as const,
     estado: 'vendido' as const
@@ -176,7 +174,7 @@ const lotes = [
   {
     numero: 2,
     superficie: '1000 mts²',
-    precio: '$ 4.500.000',
+    precio: 5000,
     dimensiones: '12x80',
     forma: 'rectangular' as const,
     estado: 'vendido' as const
@@ -184,7 +182,7 @@ const lotes = [
   {
     numero: 3,
     superficie: '1000 mts²',
-    precio: '$ 4.500.000',
+    precio: 5000,
     dimensiones: '12x80',
     forma: 'rectangular' as const,
     estado: 'vendido' as const
@@ -192,7 +190,7 @@ const lotes = [
   {
     numero: 4,
     superficie: '1000 mts²',
-    precio: '$ 4.500.000',
+    precio: 5000,
     dimensiones: '12x80',
     forma: 'rectangular' as const,
     estado: 'vendido' as const
@@ -200,7 +198,7 @@ const lotes = [
   {
     numero: 5,
     superficie: '1000 mts²',
-    precio: '$ 4.500.000',
+    precio: 5000,
     dimensiones: '12x80',
     forma: 'rectangular' as const,
     estado: 'vendido' as const
@@ -208,7 +206,7 @@ const lotes = [
   {
     numero: 6,
     superficie: '1000 mts²',
-    precio: '$ 4.500.000',
+    precio: 5000,
     dimensiones: '12x80',
     forma: 'rectangular' as const,
     estado: 'vendido' as const
@@ -216,7 +214,7 @@ const lotes = [
   {
     numero: 7,
     superficie: '1000 mts²',
-    precio: '$ 4.500.000',
+    precio: 5000,
     dimensiones: '12x80',
     forma: 'rectangular' as const,
     estado: 'vendido' as const
@@ -224,7 +222,7 @@ const lotes = [
   {
     numero: 8,
     superficie: '1000 mts²',
-    precio: '$ 4.500.000',
+    precio: 5000,
     dimensiones: '12x80',
     forma: 'rectangular' as const,
     estado: 'vendido' as const
@@ -232,7 +230,7 @@ const lotes = [
   {
     numero: 9,
     superficie: '1000 mts²',
-    precio: '$ 4.500.000',
+    precio: 5000,
     dimensiones: '12x80',
     forma: 'rectangular' as const,
     estado: 'vendido' as const
@@ -533,7 +531,7 @@ export default function App() {
                 <LoteCard
                   numero={lote.numero}
                   superficie={lote.superficie}
-                  precioUSD={lote.numero === 14 ? 6000 : 5000}
+                  precioUSD={lote.estado === 'disponible' ? lote.precio : 0}
                   dimensiones={lote.dimensiones}
                   forma={lote.forma}
                   estado={lote.estado}
