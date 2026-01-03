@@ -295,7 +295,7 @@ export default function App() {
     <>
       <SEOHead />
       <StructuredData lotesDisponibles={lotesDisponibles} precioMinimoUSD={5000} />
-      <Analytics gaId={import.meta.env.VITE_GA_ID} gscVerification={import.meta.env.VITE_GSC_VERIFICATION} />
+      <Analytics gscVerification={import.meta.env.VITE_GSC_VERIFICATION} />
       <div className="min-h-screen bg-[#0a0a0a] text-[#FFFFFF]" style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: '16px' }}>
         <header>
           {/* Navegación Sticky */}

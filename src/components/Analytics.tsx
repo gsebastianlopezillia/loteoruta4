@@ -2,11 +2,10 @@ import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 
 interface AnalyticsProps {
-  gaId?: string;
   gscVerification?: string;
 }
 
-export function Analytics({ gaId, gscVerification }: AnalyticsProps) {
+export function Analytics({ gscVerification }: AnalyticsProps) {
   useEffect(() => {
     // Facebook Pixel
     if (typeof window !== 'undefined') {
@@ -28,12 +27,12 @@ export function Analytics({ gaId, gscVerification }: AnalyticsProps) {
       document.head.appendChild(noscript);
     }
 
-    // Google Analytics 4
-    if (gaId && typeof window !== 'undefined') {
+    // Google Analytics 4 - Always load with specific GA ID
+    if (typeof window !== 'undefined') {
       // GA4 script
       const script1 = document.createElement('script');
       script1.async = true;
-      script1.src = `https://www.googletagmanager.com/gtag/js?id=${gaId}`;
+      script1.src = 'https://www.googletagmanager.com/gtag/js?id=G-6JZW63PDGC';
       document.head.appendChild(script1);
 
       const script2 = document.createElement('script');
@@ -41,14 +40,14 @@ export function Analytics({ gaId, gscVerification }: AnalyticsProps) {
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', '${gaId}');
+        gtag('config', 'G-6JZW63PDGC');
       `;
       document.head.appendChild(script2);
 
       // Track page views on route changes
       const handleRouteChange = () => {
         if (window.gtag) {
-          window.gtag('config', gaId, {
+          window.gtag('config', 'G-6JZW63PDGC', {
             page_path: window.location.pathname + window.location.search,
           });
         }
@@ -59,7 +58,7 @@ export function Analytics({ gaId, gscVerification }: AnalyticsProps) {
         window.removeEventListener('popstate', handleRouteChange);
       };
     }
-  }, [gaId]);
+  }, []);
 
   return (
     <Helmet>
