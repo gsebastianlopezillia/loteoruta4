@@ -335,13 +335,9 @@ export default function App() {
 
             <div className={`relative z-10 container mx-auto px-4 text-center transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
               <h1 className="text-[72px] md:text-[100px] leading-[1.2] text-[#FFFFFF] mb-6 max-w-5xl mx-auto" style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 700, letterSpacing: '0.5px', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
-                Loteo Ruta 4: Tu terreno de 1000m² en Misiones desde{' '}
-                <span className="text-[#27AE60]">{loading ? '$7.350.000' : formatCurrency(getPriceInARS('blue'))}</span>
+                Loteo Ruta 4: Tu terreno de 1000m² en Misiones
               </h1>
 
-              <p className="text-[24px] text-[#E0E0E0] mb-2" style={{ fontFamily: 'Open Sans, sans-serif', lineHeight: '1.6', fontWeight: 300 }}>
-                USD 5,000
-              </p>
 
               <p className="text-[20px] text-[#FFFFFF] mb-8 max-w-3xl mx-auto" style={{ fontFamily: 'Open Sans, sans-serif', lineHeight: '1.6' }}>
                 con Título, Asfalto, Agua
@@ -357,7 +353,7 @@ export default function App() {
               </Button>
 
               <p className="mt-8 text-[16px] text-[#A0A0A0]" style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 300, lineHeight: '1.5' }}>
-                Solo quedan {lotesDisponibles} lotes a este precio exclusivo
+                Solo quedan {lotesDisponibles} lotes disponibles
               </p>
             </div>
 
