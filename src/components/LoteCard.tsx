@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useCurrencyConversion } from '../hooks/useCurrencyConversion';
 
 interface LoteCardProps {
@@ -11,9 +12,14 @@ interface LoteCardProps {
 }
 
 export function LoteCard({ numero, superficie, precioUSD, dimensiones, forma, estado }: LoteCardProps) {
+  const { t, i18n } = useTranslation();
   const [isHovered, setIsHovered] = useState(false);
   const isDisponible = estado === 'disponible';
-  const { getPriceInARS, formatCurrency, loading } = useCurrencyConversion(precioUSD);
+  const { getPriceInARS, getPriceInBRL, getPriceInEUR, getPriceInRUB, formatCurrency, formatCurrencyBRL, formatCurrencyEUR, formatCurrencyRUB, loading, ratesLoading, brlRate, eurRate, rubRate, data } = useCurrencyConversion(precioUSD);
+  const isEn = i18n.language === 'en';
+  const isPt = i18n.language === 'pt';
+  const isDe = i18n.language === 'de';
+  const isRu = i18n.language === 'ru';
 
   // SVG Icon para forma triangular con perspectiva isométrica 2D
   const TriangularIcon = () => (
@@ -149,7 +155,7 @@ export function LoteCard({ numero, superficie, precioUSD, dimensiones, forma, es
                 borderRadius: '4px'
               }}
             >
-              VENDIDO
+              {t('loteCard.sold')}
             </div>
           </div>
         </>
@@ -170,7 +176,7 @@ export function LoteCard({ numero, superficie, precioUSD, dimensiones, forma, es
               letterSpacing: '0.5px'
             }}
           >
-            Lote {numero}
+            {t('loteCard.lote')} {numero}
           </h3>
 
           {/* Superficie */}
@@ -197,17 +203,30 @@ export function LoteCard({ numero, superficie, precioUSD, dimensiones, forma, es
                 letterSpacing: '0.5px'
               }}
             >
-              {loading ? 'Cargando...' : formatCurrency(getPriceInARS('blue'))}
+              {loading ? t('loteCard.loading') : isEn ? `$${precioUSD.toLocaleString('en-US')} USD` : isPt ? (ratesLoading || brlRate == null ? `$${precioUSD.toLocaleString('en-US')} USD` : formatCurrencyBRL(getPriceInBRL())) : isDe ? (ratesLoading || eurRate == null ? `$${precioUSD.toLocaleString('en-US')} USD` : formatCurrencyEUR(getPriceInEUR())) : isRu ? (ratesLoading || rubRate == null ? `$${precioUSD.toLocaleString('en-US')} USD` : formatCurrencyRUB(getPriceInRUB())) : (data == null ? `$${precioUSD.toLocaleString('en-US')} USD` : formatCurrency(getPriceInARS('blue')))}
             </p>
-            <p
-              className={`text-xs mt-1 ${isDisponible ? 'text-[#888888]' : 'text-[#606060]'}`}
-              style={{
-                fontFamily: 'Open Sans, sans-serif',
-                fontWeight: 300
-              }}
-            >
-              ≈ ${precioUSD.toLocaleString()} USD
-            </p>
+            {((i18n.language === 'es' && data != null) || (isPt && brlRate != null) || (isDe && eurRate != null) || (isRu && rubRate != null)) && precioUSD > 0 && (
+              <p
+                className={`text-xs mt-1 ${isDisponible ? 'text-[#888888]' : 'text-[#606060]'}`}
+                style={{
+                  fontFamily: 'Open Sans, sans-serif',
+                  fontWeight: 300
+                }}
+              >
+                ≈ ${precioUSD.toLocaleString()} USD
+              </p>
+            )}
+            {isEn && data != null && precioUSD > 0 && (
+              <p
+                className={`text-xs mt-1 ${isDisponible ? 'text-[#888888]' : 'text-[#606060]'}`}
+                style={{
+                  fontFamily: 'Open Sans, sans-serif',
+                  fontWeight: 300
+                }}
+              >
+                ≈ {formatCurrency(getPriceInARS('blue'))} ARS
+              </p>
+            )}
           </div>
 
           {/* Dimensiones alineadas con el precio */}
