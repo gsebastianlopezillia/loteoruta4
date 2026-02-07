@@ -19,8 +19,8 @@ export function SEOHead({
   const { t, i18n } = useTranslation();
   const resolvedTitle = title ?? t('seo.title');
   const resolvedDescription = description ?? t('seo.description');
-  const locale = i18n.language === 'en' ? 'en_US' : 'es_AR';
-  const htmlLang = i18n.language === 'en' ? 'en' : 'es';
+  const locale = i18n.language === 'en' ? 'en_US' : i18n.language === 'pt' ? 'pt_BR' : i18n.language === 'de' ? 'de_DE' : i18n.language === 'ru' ? 'ru_RU' : 'es_AR';
+  const htmlLang = i18n.language === 'en' ? 'en' : i18n.language === 'pt' ? 'pt' : i18n.language === 'de' ? 'de' : i18n.language === 'ru' ? 'ru' : 'es';
 
   useEffect(() => {
     document.documentElement.lang = htmlLang;

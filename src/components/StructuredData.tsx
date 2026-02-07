@@ -32,7 +32,7 @@ export function StructuredData({ lotesDisponibles, precioMinimoUSD = 5000 }: Str
       "@type": "ContactPoint",
       "telephone": "+54-376-416-5357",
       "contactType": "Sales",
-      "availableLanguage": i18n.language === 'en' ? "English" : "Spanish"
+      "availableLanguage": i18n.language === 'en' ? "English" : i18n.language === 'pt' ? "Portuguese" : i18n.language === 'de' ? "German" : i18n.language === 'ru' ? "Russian" : "Spanish"
     }
   };
 

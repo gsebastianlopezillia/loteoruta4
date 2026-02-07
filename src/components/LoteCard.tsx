@@ -15,8 +15,11 @@ export function LoteCard({ numero, superficie, precioUSD, dimensiones, forma, es
   const { t, i18n } = useTranslation();
   const [isHovered, setIsHovered] = useState(false);
   const isDisponible = estado === 'disponible';
-  const { getPriceInARS, formatCurrency, loading } = useCurrencyConversion(precioUSD);
+  const { getPriceInARS, getPriceInBRL, getPriceInEUR, getPriceInRUB, formatCurrency, formatCurrencyBRL, formatCurrencyEUR, formatCurrencyRUB, loading, ratesLoading, brlRate, eurRate, rubRate, data } = useCurrencyConversion(precioUSD);
   const isEn = i18n.language === 'en';
+  const isPt = i18n.language === 'pt';
+  const isDe = i18n.language === 'de';
+  const isRu = i18n.language === 'ru';
 
   // SVG Icon para forma triangular con perspectiva isométrica 2D
   const TriangularIcon = () => (
@@ -200,9 +203,9 @@ export function LoteCard({ numero, superficie, precioUSD, dimensiones, forma, es
                 letterSpacing: '0.5px'
               }}
             >
-              {loading ? t('loteCard.loading') : isEn ? `$${precioUSD.toLocaleString('en-US')} USD` : formatCurrency(getPriceInARS('blue'))}
+              {loading ? t('loteCard.loading') : isEn ? `$${precioUSD.toLocaleString('en-US')} USD` : isPt ? (ratesLoading || brlRate == null ? `$${precioUSD.toLocaleString('en-US')} USD` : formatCurrencyBRL(getPriceInBRL())) : isDe ? (ratesLoading || eurRate == null ? `$${precioUSD.toLocaleString('en-US')} USD` : formatCurrencyEUR(getPriceInEUR())) : isRu ? (ratesLoading || rubRate == null ? `$${precioUSD.toLocaleString('en-US')} USD` : formatCurrencyRUB(getPriceInRUB())) : (data == null ? `$${precioUSD.toLocaleString('en-US')} USD` : formatCurrency(getPriceInARS('blue')))}
             </p>
-            {!isEn && precioUSD > 0 && (
+            {((i18n.language === 'es' && data != null) || (isPt && brlRate != null) || (isDe && eurRate != null) || (isRu && rubRate != null)) && precioUSD > 0 && (
               <p
                 className={`text-xs mt-1 ${isDisponible ? 'text-[#888888]' : 'text-[#606060]'}`}
                 style={{
@@ -213,7 +216,7 @@ export function LoteCard({ numero, superficie, precioUSD, dimensiones, forma, es
                 ≈ ${precioUSD.toLocaleString()} USD
               </p>
             )}
-            {isEn && precioUSD > 0 && (
+            {isEn && data != null && precioUSD > 0 && (
               <p
                 className={`text-xs mt-1 ${isDisponible ? 'text-[#888888]' : 'text-[#606060]'}`}
                 style={{

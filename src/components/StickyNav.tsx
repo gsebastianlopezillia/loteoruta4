@@ -1,9 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Phone } from 'lucide-react';
+import { Phone, ChevronDown } from 'lucide-react';
 import 'react-flagpack/dist/style.css';
 
 const flagsBase = `${import.meta.env.BASE_URL}flags`;
+const LANGUAGES: { code: string; flag: string; label: string }[] = [
+  { code: 'es', flag: 'AR', label: 'Español' },
+  { code: 'en', flag: 'US', label: 'English' },
+  { code: 'pt', flag: 'BR', label: 'Português' },
+  { code: 'de', flag: 'DE', label: 'Deutsch' },
+  { code: 'ru', flag: 'RU', label: 'Русский' },
+];
+
 function FlagIcon({ code, size = 's' }: { code: string; size?: 's' | 'm' | 'l' }) {
   return (
     <div className={`flag size-${size} border-radius`}>
@@ -15,6 +23,16 @@ function FlagIcon({ code, size = 's' }: { code: string; size?: 's' | 'm' | 'l' }
 export function StickyNav() {
   const { t, i18n } = useTranslation();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [langOpen, setLangOpen] = useState(false);
+  const langMenuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (langMenuRef.current && !langMenuRef.current.contains(e.target as Node)) setLangOpen(false);
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -81,27 +99,42 @@ export function StickyNav() {
             ))}
           </div>
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-0.5 rounded-lg border border-[#2a2a2a] p-0.5">
+            <div className="relative" ref={langMenuRef}>
               <button
                 type="button"
-                onClick={() => i18n.changeLanguage('es')}
-                title="Español"
-                aria-label="Español"
-                style={{ marginInline: '.5rem' }}
-                className={`p-1 rounded transition-colors flex items-center justify-center ${i18n.language === 'es' ? 'bg-[#27AE60] ring-1 ring-[#27AE60]' : 'hover:bg-[#27AE60]/20'}`}
+                onClick={(e) => { e.stopPropagation(); setLangOpen((o) => !o); }}
+                title={t('nav.language')}
+                aria-label={t('nav.language')}
+                aria-expanded={langOpen}
+                aria-haspopup="listbox"
+                className="flex items-center gap-1.5 rounded-lg border border-[#2a2a2a] bg-[#1a1a1a] px-2 py-1.5 text-[#D0D0D0] hover:bg-[#27AE60]/10 hover:border-[#27AE60]/30 transition-colors"
               >
-                <FlagIcon code="AR" size="s" />
+                <FlagIcon code={LANGUAGES.find((l) => l.code === i18n.language)?.flag ?? 'AR'} size="s" />
+                <span className="text-xs font-medium max-w-[4rem] truncate" style={{ fontFamily: 'Open Sans, sans-serif' }}>
+                  {LANGUAGES.find((l) => l.code === i18n.language)?.label ?? 'Español'}
+                </span>
+                <ChevronDown className={`size-4 shrink-0 transition-transform ${langOpen ? 'rotate-180' : ''}`} />
               </button>
-              <button
-                type="button"
-                onClick={() => i18n.changeLanguage('en')}
-                title="English"
-                aria-label="English"
-                style={{ marginInline: '.5rem' }}
-                className={`p-1 rounded transition-colors flex items-center justify-center ${i18n.language === 'en' ? 'bg-[#27AE60] ring-1 ring-[#27AE60]' : 'hover:bg-[#27AE60]/20'}`}
-              >
-                <FlagIcon code="US" size="s" />
-              </button>
+              {langOpen && (
+                <ul
+                  role="listbox"
+                  className="absolute right-0 top-full mt-1 min-w-[10rem] rounded-lg border border-[#2a2a2a] bg-[#1a1a1a] shadow-xl py-1 z-50"
+                >
+                  {LANGUAGES.map((lang) => (
+                    <li key={lang.code} role="option" aria-selected={i18n.language === lang.code}>
+                      <button
+                        type="button"
+                        onClick={() => { i18n.changeLanguage(lang.code); setLangOpen(false); }}
+                        className={`w-full flex items-center gap-2 px-3 py-2 text-left text-sm transition-colors ${i18n.language === lang.code ? 'bg-[#27AE60]/20 text-[#27AE60]' : 'text-[#D0D0D0] hover:bg-[#27AE60]/10'}`}
+                        style={{ fontFamily: 'Open Sans, sans-serif' }}
+                      >
+                        <FlagIcon code={lang.flag} size="s" />
+                        {lang.label}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
             <button
               onClick={handleWhatsApp}
