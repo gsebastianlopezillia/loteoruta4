@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { CountdownTimer } from './components/CountdownTimer';
 import { LoteCard } from './components/LoteCard';
 import { BenefitCard } from './components/BenefitCard';
@@ -38,90 +39,19 @@ import loteoBiodiversidad from './assets/loteo_biodiversidad_10.jpeg';
 import loteoEspaciosNaturales from './assets/loteo_espacios_naturales_11.jpeg';
 import loteoUbicacionEstrategica from './assets/loteo_ubicacion_estrategica_12.jpeg';
 
-const galleryImages = [
-  {
-    url: loteoVistaGeneral,
-    title: 'Vista general del loteo',
-    description: 'Perspectiva completa del proyecto Ruta 4 y su ubicación privilegiada'
-  },
-  {
-    url: loteoVistaAerea,
-    title: 'Vista aérea del loteo',
-    description: 'Ruta 4 asfaltada y naturaleza en perfecta armonía desde las alturas'
-  },
-  {
-    url: loteoCaminosInternos,
-    title: 'Caminos internos',
-    description: 'Accesos mantenidos y delimitados entre lotes para facilitar la circulación'
-  },
-  {
-    url: loteoMonteNativo,
-    title: 'Monte nativo recuperado',
-    description: 'Vegetación autóctona y flores silvestres en plena recuperación'
-  },
-  {
-    url: loteoAccesoPrincipal,
-    title: 'Acceso principal',
-    description: 'Entrada principal al loteo con diseño integrado al paisaje natural'
-  },
-  {
-    url: loteoViasCirculacion,
-    title: 'Vías de circulación',
-    description: 'Sistema completo de vías pavimentadas para acceso vehicular'
-  },
-  {
-    url: loteoSenderosPeatonales,
-    title: 'Senderos peatonales',
-    description: 'Caminos peatonales que conectan los lotes con zonas comunes'
-  },
-  {
-    url: loteoZonasComunes,
-    title: 'Zonas comunes',
-    description: 'Áreas recreativas compartidas para el disfrute de todos los propietarios'
-  },
-  {
-    url: loteoAreaVerde,
-    title: 'Área verde',
-    description: 'Espacios verdes preservados para mantener el equilibrio ecológico'
-  },
-  {
-    url: loteoBiodiversidad,
-    title: 'Biodiversidad',
-    description: 'Diversidad de especies nativas protegidas y fomentadas'
-  },
-  {
-    url: loteoEspaciosNaturales,
-    title: 'Espacios naturales',
-    description: 'Reservas naturales que mantienen la esencia del entorno original'
-  },
-  {
-    url: loteoUbicacionEstrategica,
-    title: 'Ubicación estratégica',
-    description: 'Posición privilegiada con acceso directo a la Ruta 4 asfaltada'
-  }
-];
-
-const testimonials = [
-  {
-    text: 'El lote está ubicado en un lugar estratégico y accesible, de facil acceso a la ruta asfaltada y en auto. Conectando con la ciudad y otros puntos de interés. Ideal para vivienda y quinta y proyectos al aire libre.',
-    subtitle: 'Directora de escuela - La Plata'
-  },
-  {
-    text: 'Un trámite super sencillo, un placer hacer negocio con los chicos.',
-    subtitle: 'Inversor - Buenos Aires'
-  },
-  {
-    text: 'Estoy muy feliz con el terreno, tengo varios frutales y buena sombra de los pinos para hacer mi cabañita.',
-    subtitle: 'Camionero - San Luis'
-  },
-  {
-    text: 'La parte alta del lote ofrece una vista única con panorámica de la zona verde de Almafuerte.',
-    subtitle: 'Particular - Posadas'
-  },
-  {
-    text: 'Puedo calificar de excelente mí experiencia como comprador de un lote! Agradecido por la atención y predisposición de los propietarios. Terrenos amplios, con una buena ubicación, con múltiples posibilidades!',
-    subtitle: 'Particular - Los Helechos'
-  }
+const galleryUrls = [
+  loteoVistaGeneral,
+  loteoVistaAerea,
+  loteoCaminosInternos,
+  loteoMonteNativo,
+  loteoAccesoPrincipal,
+  loteoViasCirculacion,
+  loteoSenderosPeatonales,
+  loteoZonasComunes,
+  loteoAreaVerde,
+  loteoBiodiversidad,
+  loteoEspaciosNaturales,
+  loteoUbicacionEstrategica
 ];
 
 const lotes = [
@@ -264,11 +194,22 @@ function useScrollAnimation() {
 }
 
 export default function App() {
+  const { t } = useTranslation();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const [showAllLotes, setShowAllLotes] = useState(false);
   const [currentTestimonialIndex, setCurrentTestimonialIndex] = useState(0);
   const { getPriceInARS, formatCurrency, loading } = useCurrencyConversion(5000);
+
+  const galleryImages = useMemo(() => galleryUrls.map((url, i) => ({
+    url,
+    title: t(`gallery.images.${i}title`),
+    description: t(`gallery.images.${i}desc`)
+  })), [t]);
+  const testimonials = useMemo(() => [1, 2, 3, 4, 5].map((i) => ({
+    text: t(`testimonials.${i}text`),
+    subtitle: t(`testimonials.${i}subtitle`)
+  })), [t]);
 
   useScrollAnimation();
 
@@ -277,7 +218,7 @@ export default function App() {
   }, []);
 
   const handleWhatsAppMain = () => {
-    const message = encodeURIComponent('Hola, quiero información sobre lotes Ruta 4');
+    const message = encodeURIComponent(t('whatsapp.defaultMessage'));
     window.open(`https://wa.me/543764165357?text=${message}`, '_blank');
   };
 
@@ -308,13 +249,13 @@ export default function App() {
           <div className="bg-gradient-to-r from-[#004D40] via-[#27AE60] to-[#004D40] overflow-hidden relative shadow-lg" style={{ height: '58px', display: 'flex', alignItems: 'center' }}>
             <div className="animate-scroll whitespace-nowrap">
               <span className="inline-block px-8 text-white" style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 700, fontSize: '16px', letterSpacing: '0.5px' }}>
-                🌞 OFERTA VERANO: con el lote te entregamos un tanque tricapa de 600lts 🌞
+                {t('banner.summerOffer')}
               </span>
               <span className="inline-block px-8 text-white" style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 700, fontSize: '16px', letterSpacing: '0.5px' }}>
-                🌞 OFERTA VERANO: con el lote te entregamos un tanque tricapa de 600lts 🌞
+                {t('banner.summerOffer')}
               </span>
-              <span className="inline-block px-8 text-white" style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 700, fontSize: '16px', letterSpacing: '0.5px', fontSize: '16px', letterSpacing: '0.5px' }}>
-                🌞 OFERTA VERANO: con el lote te entregamos un tanque tricapa de 600lts 🌞
+              <span className="inline-block px-8 text-white" style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 700, fontSize: '16px', letterSpacing: '0.5px' }}>
+                {t('banner.summerOffer')}
               </span>
             </div>
           </div>
@@ -335,25 +276,21 @@ export default function App() {
 
             <div className={`relative z-10 container mx-auto px-4 text-center transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
               <h1 className="text-[72px] md:text-[100px] leading-[1.2] text-[#FFFFFF] mb-6 max-w-5xl mx-auto" style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 700, letterSpacing: '0.5px', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
-                Loteo Ruta 4: Tu terreno de 1000m² en Misiones
+                {t('hero.title')}
               </h1>
-
-
               <p className="text-[20px] text-[#FFFFFF] mb-8 max-w-3xl mx-auto" style={{ fontFamily: 'Open Sans, sans-serif', lineHeight: '1.6' }}>
-                con Título, Asfalto, Agua
+                {t('hero.subtitle')}
               </p>
-
               <Button
                 onClick={handleWhatsAppMain}
                 className="bg-[#27AE60] hover:bg-[#1e8449] text-white px-16 py-8 transition-all duration-300 hover:scale-[1.08] shadow-2xl shadow-[#27AE60]/50"
                 style={{ borderRadius: '8px', fontSize: '20px', fontFamily: 'Montserrat, sans-serif', fontWeight: 600, letterSpacing: '0.5px' }}
               >
                 <Phone className="mr-2 size-5" />
-                RESERVAR MI LOTE
+                {t('hero.cta')}
               </Button>
-
               <p className="mt-8 text-[16px] text-[#A0A0A0]" style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 300, lineHeight: '1.5' }}>
-                Solo quedan {lotesDisponibles} lotes disponibles
+                {t('hero.lotsLeft', { count: lotesDisponibles })}
               </p>
             </div>
 
@@ -367,35 +304,35 @@ export default function App() {
             <div className="container mx-auto max-w-4xl px-4">
               <div className="text-center space-y-6">
                 <h2 className="animate-on-scroll text-[48px] md:text-[54px] leading-[1.4] text-[#FFFFFF]" style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 500, letterSpacing: '0.2px', fontStyle: 'italic' }}>
-                  ¿Harto de ver tu plata evaporarse en alquiler o inflación en la ciudad?
+                  {t('garantias.headline')}
                 </h2>
                 <p className="animate-on-scroll text-[18px] text-[#E0E0E0] leading-relaxed" style={{ fontFamily: 'Open Sans, sans-serif', lineHeight: '1.6', maxWidth: '800px', margin: '0 auto', padding: '20px' }}>
-                  Imaginate jubilado o trabajando remote en tu propio paraíso: monte nativo fresco,
-                  arroyo a 200m para refrescarte, <span className="text-[#27AE60]">1000m² que parecen un reino</span> (gigante
-                  para citadinos, ideal para casa familiar o inversión).
+                  {t('garantias.introBefore')}
+                  <span className="text-[#27AE60]">{t('garantias.introHighlight')}</span>
+                  {t('garantias.introAfter')}
                 </p>
                 <div className="animate-on-scroll pt-6 space-y-4 text-left bg-[#121212] p-8 rounded-lg border border-[#333]">
-                  <h3 className="text-[32px] text-[#27AE60]" style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 500, letterSpacing: '0.2px' }}>Garantías absolutas:</h3>
+                  <h3 className="text-[32px] text-[#27AE60]" style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 500, letterSpacing: '0.2px' }}>{t('garantias.title')}</h3>
                   <ul className="space-y-3 text-[#E0E0E0]" style={{ fontFamily: 'Open Sans, sans-serif', fontSize: '16px', lineHeight: '1.6' }}>
                     <li className="flex items-start gap-3">
                       <FileCheck className="size-5 text-[#27AE60] mt-1 flex-shrink-0" />
-                      <span>Título listo para escriturar ya - Sin complicaciones legales</span>
+                      <span>{t('garantias.item1')}</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <MapPin className="size-5 text-[#27AE60] mt-1 flex-shrink-0" />
-                      <span>Ruta asfaltada frente - No precisás camioneta ni 4x4</span>
+                      <span>{t('garantias.item2')}</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <Droplets className="size-5 text-[#27AE60] mt-1 flex-shrink-0" />
-                      <span>Servicios agua/luz en puerta - Listo para construir</span>
+                      <span>{t('garantias.item3')}</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <Home className="size-5 text-[#27AE60] mt-1 flex-shrink-0" />
-                      <span>Escuela/colectivo a 150m - Ideal para familias</span>
+                      <span>{t('garantias.item4')}</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <MapPin className="size-5 text-[#27AE60] mt-1 flex-shrink-0" />
-                      <span>4km de Bonpland y 15km de Oberá - Cerca de todo sin ruido</span>
+                      <span>{t('garantias.item5')}</span>
                     </li>
                   </ul>
                 </div>
@@ -407,10 +344,10 @@ export default function App() {
             <div className="container mx-auto max-w-6xl px-4">
               <div className="text-center mb-16">
                 <h2 className="animate-on-scroll text-[48px] md:text-[56px] leading-[1.2] text-[#FFFFFF] mb-4" style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 600, letterSpacing: '0.3px' }}>
-                  Ubicación <span className="text-[#27AE60]">Privilegiada</span>
+                  {t('ubicacion.title')} <span className="text-[#27AE60]">{t('ubicacion.titleHighlight')}</span>
                 </h2>
                 <p className="animate-on-scroll text-[18px] text-[#E0E0E0]" style={{ fontFamily: 'Open Sans, sans-serif', lineHeight: '1.6' }}>
-                  Ruta Provincial 4, Almafuerte, Misiones - El equilibrio perfecto entre naturaleza y conectividad
+                  {t('ubicacion.subtitle')}
                 </p>
               </div>
 
@@ -424,7 +361,7 @@ export default function App() {
                     allowFullScreen
                     loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
-                    title="Ubicación Loteo Ruta 4"
+                    title={t('ubicacion.mapTitle')}
                   />
                 </div>
 
@@ -435,9 +372,9 @@ export default function App() {
                         <MapPin className="size-6 text-[#27AE60] flex-shrink-0" />
                       </div>
                       <div>
-                        <h3 className="text-[#FFFFFF] mb-2 text-[20px]" style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 600, letterSpacing: '0.3px' }}>Frente directo a Ruta 4 asfaltada</h3>
+                        <h3 className="text-[#FFFFFF] mb-2 text-[20px]" style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 600, letterSpacing: '0.3px' }}>{t('ubicacion.card1Title')}</h3>
                         <p className="text-[16px] text-[#D0D0D0]" style={{ fontFamily: 'Open Sans, sans-serif', lineHeight: '1.5' }}>
-                          Acceso fácil todo el año y alta valorización a futuro
+                          {t('ubicacion.card1Desc')}
                         </p>
                       </div>
                     </div>
@@ -449,9 +386,9 @@ export default function App() {
                         <Home className="size-6 text-[#27AE60] flex-shrink-0" />
                       </div>
                       <div>
-                        <h3 className="text-[#FFFFFF] mb-2 text-[20px]" style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 600, letterSpacing: '0.3px' }}>A 150m de escuela y parada de colectivo</h3>
+                        <h3 className="text-[#FFFFFF] mb-2 text-[20px]" style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 600, letterSpacing: '0.3px' }}>{t('ubicacion.card2Title')}</h3>
                         <p className="text-[16px] text-[#D0D0D0]" style={{ fontFamily: 'Open Sans, sans-serif', lineHeight: '1.5' }}>
-                          Ideal para familias con nios o proyectos comunitarios
+                          {t('ubicacion.card2Desc')}
                         </p>
                       </div>
                     </div>
@@ -463,9 +400,9 @@ export default function App() {
                         <Droplets className="size-6 text-[#27AE60] flex-shrink-0" />
                       </div>
                       <div>
-                        <h3 className="text-[#FFFFFF] mb-2 text-[20px]" style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 600, letterSpacing: '0.3px' }}>200m de arroyo</h3>
+                        <h3 className="text-[#FFFFFF] mb-2 text-[20px]" style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 600, letterSpacing: '0.3px' }}>{t('ubicacion.card3Title')}</h3>
                         <p className="text-[16px] text-[#D0D0D0]" style={{ fontFamily: 'Open Sans, sans-serif', lineHeight: '1.5' }}>
-                          Naturaleza pura para refrescarte y conectar con el entorno
+                          {t('ubicacion.card3Desc')}
                         </p>
                       </div>
                     </div>
@@ -477,9 +414,9 @@ export default function App() {
                         <Building2 className="size-6 text-[#27AE60] flex-shrink-0" />
                       </div>
                       <div>
-                        <h3 className="text-[#FFFFFF] mb-2 text-[20px]" style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 600, letterSpacing: '0.3px' }}>4km de Bonpland, 15km de Oberá</h3>
+                        <h3 className="text-[#FFFFFF] mb-2 text-[20px]" style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 600, letterSpacing: '0.3px' }}>{t('ubicacion.card4Title')}</h3>
                         <p className="text-[16px] text-[#D0D0D0]" style={{ fontFamily: 'Open Sans, sans-serif', lineHeight: '1.5' }}>
-                          Cerca de servicios y comercios sin el ruido de la ciudad
+                          {t('ubicacion.card4Desc')}
                         </p>
                       </div>
                     </div>
@@ -494,10 +431,10 @@ export default function App() {
             <div className="container mx-auto max-w-7xl px-4">
               <div className="text-center mb-12">
                 <h2 className="animate-on-scroll text-[48px] md:text-[54px] leading-[1.2] text-[#FFFFFF] mb-4" style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 500, letterSpacing: '0.2px' }}>
-                  Lotes <span className="text-[#27AE60]">Disponibles</span>
+                  {t('lotes.title')} <span className="text-[#27AE60]">{t('lotes.titleHighlight')}</span>
                 </h2>
                 <p className="animate-on-scroll text-[18px] text-[#E0E0E0]" style={{ fontFamily: 'Open Sans, sans-serif', lineHeight: '1.6' }}>
-                  Elegí el lote perfecto para tu proyecto de vida
+                  {t('lotes.subtitle')}
                 </p>
               </div>
 
@@ -512,9 +449,9 @@ export default function App() {
                   >
                     <LoteCard
                       numero={lote.numero}
-                      superficie={lote.superficie}
+                      superficie={t('common.surfaceValue')}
                       precioUSD={lote.estado === 'disponible' ? lote.precio : 0}
-                      dimensiones={lote.dimensiones}
+                      dimensiones={t(lote.forma === 'rectangular' ? 'common.dimensionesRect' : 'common.dimensionesTri')}
                       forma={lote.forma}
                       estado={lote.estado}
                     />
@@ -535,7 +472,7 @@ export default function App() {
                       letterSpacing: '0.5px'
                     }}
                   >
-                    Mostrar más lotes
+                    {t('lotes.showMore')}
                   </Button>
                 </div>
               )}
@@ -547,56 +484,55 @@ export default function App() {
             <div className="container mx-auto max-w-7xl px-4">
               <div className="text-center mb-16">
                 <h2 className="animate-on-scroll text-[48px] md:text-[56px] leading-[1.2] text-[#FFFFFF] mb-4" style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 600, letterSpacing: '0.3px' }}>
-                  ¿Por qué <span className="text-[#27AE60]">Loteo Ruta 4?</span>
+                  {t('benefits.title')} <span className="text-[#27AE60]">{t('benefits.titleHighlight')}</span>
                 </h2>
                 <p className="animate-on-scroll text-[18px] text-[#E0E0E0]" style={{ fontFamily: 'Open Sans, sans-serif', lineHeight: '1.6' }}>
-                  Todo lo que necesitás para tu proyecto de vida o inversión
+                  {t('benefits.subtitle')}
                 </p>
               </div>
-
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
                 <div className="animate-on-scroll">
                   <BenefitCard
                     icon={Trees}
-                    title="Monte Nativo Recuperado"
-                    description="Sombra natural, frescura y ecosistema vivo para disfrutar todo el año"
+                    title={t('benefits.1title')}
+                    description={t('benefits.1desc')}
                   />
                 </div>
                 <div className="animate-on-scroll">
                   <BenefitCard
                     icon={Sprout}
-                    title="Suelo Premium"
-                    description="6a pedregoso que filtra, al ser en pendiente, imposible inundación"
+                    title={t('benefits.2title')}
+                    description={t('benefits.2desc')}
                   />
                 </div>
                 <div className="animate-on-scroll">
                   <BenefitCard
                     icon={TrendingUp}
-                    title="Múltiples Posibilidades"
-                    description="Casa familiar, cabañas turísticas, negocio rutero o renta pasiva forestación"
+                    title={t('benefits.3title')}
+                    description={t('benefits.3desc')}
                   />
                 </div>
                 <div className="animate-on-scroll">
                   <BenefitCard
                     icon={TrendingUp}
-                    title="Valorización Segura"
-                    description="El nuevo puente internacional impulsará la zona exponencialmente"
+                    title={t('benefits.4title')}
+                    description={t('benefits.4desc')}
                     link="https://www.cronista.com/informacion-gral/construyen-un-mega-puente-internacional-tendra-900-metros-y-unira-argentina-con-brasil/"
-                    linkText="Ver Noticia"
+                    linkText={t('benefits.4link')}
                   />
                 </div>
                 <div className="animate-on-scroll">
                   <BenefitCard
                     icon={Wifi}
-                    title="Servicios Completos"
-                    description="Agua en puerta, luz sobre ruta, internet de calidad para trabajo remoto"
+                    title={t('benefits.5title')}
+                    description={t('benefits.5desc')}
                   />
                 </div>
                 <div className="animate-on-scroll">
                   <BenefitCard
                     icon={FileCheck}
-                    title="Documentación Perfecta"
-                    description="Títulos 100% en regla, escrituración inmediata sin trabas burocráticas"
+                    title={t('benefits.6title')}
+                    description={t('benefits.6desc')}
                   />
                 </div>
               </div>
@@ -608,10 +544,10 @@ export default function App() {
             <div className="container mx-auto max-w-6xl px-4">
               <div className="text-center mb-16">
                 <h2 className="animate-on-scroll text-[48px] md:text-[56px] leading-[1.2] text-[#FFFFFF] mb-4" style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 600, letterSpacing: '0.3px' }}>
-                  Conocé el <span className="text-[#27AE60]">Proyecto</span>
+                  {t('gallery.title')} <span className="text-[#27AE60]">{t('gallery.titleHighlight')}</span>
                 </h2>
                 <p className="animate-on-scroll text-[18px] text-[#E0E0E0]" style={{ fontFamily: 'Open Sans, sans-serif', lineHeight: '1.6' }}>
-                  Imágenes reales del loteo y su entorno natural
+                  {t('gallery.subtitle')}
                 </p>
               </div>
 
@@ -635,15 +571,14 @@ export default function App() {
                 <button
                   onClick={prevImage}
                   className="absolute left-4 top-1/2 -translate-y-1/2 bg-[#27AE60]/90 hover:bg-[#27AE60] text-white p-3 rounded-full transition-all shadow-lg"
-                  aria-label="Imagen anterior"
+                  aria-label={t('gallery.prevImage')}
                 >
                   <ChevronLeft className="size-6" />
                 </button>
-
                 <button
                   onClick={nextImage}
                   className="absolute right-4 top-1/2 -translate-y-1/2 bg-[#27AE60]/90 hover:bg-[#27AE60] text-white p-3 rounded-full transition-all shadow-lg"
-                  aria-label="Siguiente imagen"
+                  aria-label={t('gallery.nextImage')}
                 >
                   <ChevronRight className="size-6" />
                 </button>
@@ -657,7 +592,7 @@ export default function App() {
                           ? 'w-8 bg-[#27AE60]'
                           : 'w-2 bg-[#FFFFFF]/30 hover:bg-[#FFFFFF]/50'
                         }`}
-                      aria-label={`Ir a imagen ${index + 1}`}
+                      aria-label={t('gallery.goToImage', { index: index + 1 })}
                     />
                   ))}
                 </div>
@@ -695,7 +630,7 @@ export default function App() {
                   <iframe
                     className="absolute top-0 left-0 w-full h-full"
                     src="https://www.youtube.com/embed/Gpv1sWGmM-E?si=d9n6pu0FTTBCF2DL"
-                    title="Recorrido virtual del loteo"
+                    title={t('video.title')}
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     referrerPolicy="strict-origin-when-cross-origin"
@@ -711,7 +646,7 @@ export default function App() {
             <div className="container mx-auto max-w-5xl px-4">
               <div className="text-center mb-16">
                 <h2 className="animate-on-scroll text-[48px] md:text-[56px] leading-[1.2] text-[#FFFFFF] mb-4" style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 600, letterSpacing: '0.3px' }}>
-                  Lo que dicen quienes <span className="text-[#27AE60]">ya compraron</span>
+                  {t('testimonials.title')} <span className="text-[#27AE60]">{t('testimonials.titleHighlight')}</span>
                 </h2>
               </div>
 
@@ -730,14 +665,14 @@ export default function App() {
                 <button
                   onClick={() => setCurrentTestimonialIndex((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1))}
                   className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-12 p-3 rounded-full bg-[#1a1a1a]/80 hover:bg-[#27AE60]/20 border border-[#333] hover:border-[#27AE60] transition-all duration-300 backdrop-blur-sm group"
-                  aria-label="Testimonio anterior"
+                  aria-label={t('testimonials.prev')}
                 >
                   <ChevronLeft className="size-6 text-[#999] group-hover:text-[#27AE60] transition-colors" />
                 </button>
                 <button
                   onClick={() => setCurrentTestimonialIndex((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1))}
                   className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-12 p-3 rounded-full bg-[#1a1a1a]/80 hover:bg-[#27AE60]/20 border border-[#333] hover:border-[#27AE60] transition-all duration-300 backdrop-blur-sm group"
-                  aria-label="Siguiente testimonio"
+                  aria-label={t('testimonials.next')}
                 >
                   <ChevronRight className="size-6 text-[#999] group-hover:text-[#27AE60] transition-colors" />
                 </button>
@@ -752,7 +687,7 @@ export default function App() {
                           ? 'w-8 bg-[#27AE60]'
                           : 'w-2 bg-[#333] hover:bg-[#555]'
                         }`}
-                      aria-label={`Ir a testimonio ${index + 1}`}
+                      aria-label={t('testimonials.goTo', { index: index + 1 })}
                     />
                   ))}
                 </div>
@@ -764,7 +699,7 @@ export default function App() {
           <section className="py-28 bg-[#121212]">
             <div className="container mx-auto max-w-4xl text-center px-4">
               <h2 className="animate-on-scroll text-[48px] md:text-[56px] leading-[1.2] text-[#FFFFFF] mb-6" style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 600, letterSpacing: '0.3px' }}>
-                ¿Listo para una <span className="text-[#27AE60]">buena inversión</span>?
+                {t('cta.title')} <span className="text-[#27AE60]">{t('cta.titleHighlight')}</span>
               </h2>
               <Button
                 onClick={handleWhatsAppMain}
@@ -772,7 +707,7 @@ export default function App() {
                 style={{ borderRadius: '60px', fontSize: '20px', fontFamily: 'Montserrat, sans-serif', fontWeight: 600, letterSpacing: '0.5px' }}
               >
                 <Phone className="mr-2 size-5" />
-                Consultá disponibilidad ahora
+                {t('cta.button')}
               </Button>
             </div>
           </section>
@@ -782,124 +717,80 @@ export default function App() {
             <div className="container mx-auto max-w-4xl px-4">
               <div className="text-center mb-16">
                 <h2 className="animate-on-scroll text-[48px] md:text-[56px] leading-[1.2] text-[#FFFFFF] mb-4" style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 600, letterSpacing: '0.3px' }}>
-                  Preguntas <span className="text-[#27AE60]">Frecuentes</span>
+                  {t('faq.title')} <span className="text-[#27AE60]">{t('faq.titleHighlight')}</span>
                 </h2>
                 <p className="animate-on-scroll text-[18px] text-[#E0E0E0]" style={{ fontFamily: 'Open Sans, sans-serif', lineHeight: '1.6' }}>
-                  Todas las respuestas que necesitás para tomar tu decisión
+                  {t('faq.subtitle')}
                 </p>
               </div>
-
               <div className="space-y-4">
                 <div className="animate-on-scroll">
-                  <FAQItem question="¿Dónde quedan exactamente los lotes?">
+                  <FAQItem question={t('faq.q1')}>
+                    <p className="mb-3">{t('faq.a1p1')}</p>
                     <p className="mb-3">
-                      Quedan sobre <strong className="text-[#27AE60]">Ruta Nacional 4</strong>, a 5 km de Bonpland y 15 km de Leandro N. Alem (por la escuela Almafuerte, ex Escuela 629).
+                      <strong>{t('faq.a1exact')}</strong><br />
+                      <a href="https://maps.app.goo.gl/wkT1nT3xwwUx5bVa8" target="_blank" rel="noopener noreferrer" className="text-[#27AE60] hover:underline">https://maps.app.goo.gl/wkT1nT3xwwUx5bVa8</a>
                     </p>
-                    <p className="mb-3">
-                      <strong>Ubicación exacta:</strong><br />
-                      <a
-                        href="https://maps.app.goo.gl/wkT1nT3xwwUx5bVa8"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-[#27AE60] hover:underline"
-                      >
-                        https://maps.app.goo.gl/wkT1nT3xwwUx5bVa8
-                      </a>
-                    </p>
-                    <p>
-                      Acceso directo por ruta asfaltada y también por calle interna.
-                    </p>
+                    <p>{t('faq.a1p2')}</p>
                   </FAQItem>
                 </div>
-
                 <div className="animate-on-scroll">
-                  <FAQItem question="¿Qué servicios tienen?">
+                  <FAQItem question={t('faq.q2')}>
                     <ul className="space-y-2">
-                      <li><strong className="text-[#27AE60]">Agua:</strong> red vecinal de pozo.</li>
-                      <li><strong className="text-[#27AE60]">Luz:</strong> línea en ruta.</li>
-                      <li><strong className="text-[#27AE60]">Internet:</strong> excelente servicio con Starlink.</li>
-                      <li><strong className="text-[#27AE60]">Calles:</strong> mantenimiento de los caminos internos y la banquina.</li>
+                      <li>{t('faq.a2water')}</li>
+                      <li>{t('faq.a2power')}</li>
+                      <li>{t('faq.a2internet')}</li>
+                      <li>{t('faq.a2streets')}</li>
                     </ul>
                   </FAQItem>
                 </div>
-
                 <div className="animate-on-scroll">
-                  <FAQItem question="¿Tienen título individual listo para escriturar?">
-                    <p>
-                      <strong className="text-[#27AE60]">Sí</strong>, todos tienen título individual y están listos para transferir. Somos titulares directos con mi esposa.
-                    </p>
+                  <FAQItem question={t('faq.q3')}>
+                    <p>{t('faq.a3')}</p>
                   </FAQItem>
                 </div>
-
                 <div className="animate-on-scroll">
-                  <FAQItem question="¿Cómo es el proceso de compra?">
+                  <FAQItem question={t('faq.q4')}>
                     <div className="space-y-3">
-                      <p>
-                        <strong className="text-[#27AE60]">1. Reserva con seña del 20%</strong> (se descuenta del total).
-                      </p>
-                      <p>
-                        Esto puede ser por transferencia o en efectivo en la escribanía de elección y se firma la documentación de seña y compromiso de reserva de tierra.
-                      </p>
-                      <p>
-                        <strong className="text-[#27AE60]">2. La escribanía solicita todos los certificados correspondientes</strong> (de dominio e inhibiciones en Rentas).
-                      </p>
-                      <p>
-                        <strong className="text-[#27AE60]">3. Se escritura tras salida de certificados</strong> (general 15-20 días).
-                      </p>
-                      <p className="mt-4">
-                        Trabajamos con la escribanía Lombardi de Posadas (Av. Roque Pérez 1615). Podemos cambiar si el comprador prefiere otra.
-                      </p>
-                      <p className="mt-4">
-                        <strong>Gastos incluidos:</strong>
-                      </p>
+                      <p><strong className="text-[#27AE60]">{t('faq.a4step1')}</strong></p>
+                      <p>{t('faq.a4p1')}</p>
+                      <p><strong className="text-[#27AE60]">{t('faq.a4step2')}</strong></p>
+                      <p><strong className="text-[#27AE60]">{t('faq.a4step3')}</strong></p>
+                      <p className="mt-4">{t('faq.a4p2')}</p>
+                      <p className="mt-4"><strong>{t('faq.a4expenses')}</strong></p>
                       <ul className="space-y-1 ml-4">
-                        <li>• 50% del Impuesto de Sellos</li>
-                        <li>• Certificados administrativos y gastos de protocolo y minutas</li>
-                        <li>• Tasa de Inscripción y derecho de escritura de compraventa</li>
-                        <li>• Tasa de Inscripción y derecho de escritura de constitución de usufructo</li>
-                        <li>• Honorarios de compraventa</li>
+                        <li>• {t('faq.a4li1')}</li>
+                        <li>• {t('faq.a4li2')}</li>
+                        <li>• {t('faq.a4li3')}</li>
+                        <li>• {t('faq.a4li4')}</li>
+                        <li>• {t('faq.a4li5')}</li>
                       </ul>
                     </div>
                   </FAQItem>
                 </div>
-
                 <div className="animate-on-scroll">
-                  <FAQItem question="¿Qué formas de pago aceptan?">
-                    <p className="mb-3">
-                      <strong className="text-[#27AE60]">Contado en cualquier moneda:</strong> pesos argentinos, dólares, guaraníes, reales, USDT, Bitcoin, etc.
-                    </p>
-                    <p>
-                      <strong>No financiación</strong> por el momento.
-                    </p>
+                  <FAQItem question={t('faq.q5')}>
+                    <p className="mb-3">{t('faq.a5p1')}</p>
+                    <p>{t('faq.a5p2')}</p>
                   </FAQItem>
                 </div>
-
                 <div className="animate-on-scroll">
-                  <FAQItem question="¿Es tranquilo y seguro el lugar?">
-                    <p>
-                      <strong className="text-[#27AE60]">Súper tranquilo y seguro.</strong> Es una zona rural muy familiar, hay varias casas alrededor, escuela enfrente, vecinos permanentes.
-                    </p>
+                  <FAQItem question={t('faq.q6')}>
+                    <p>{t('faq.a6')}</p>
                   </FAQItem>
                 </div>
               </div>
-
               <div className="mt-16 text-center">
                 <p className="animate-on-scroll text-[18px] text-[#E0E0E0] mb-6" style={{ fontFamily: 'Open Sans, sans-serif', lineHeight: '1.6' }}>
-                  ¿Tenés más preguntas? Contactanos directamente
+                  {t('faq.moreQuestions')}
                 </p>
                 <Button
                   onClick={handleWhatsAppMain}
                   className="animate-on-scroll bg-transparent border-2 border-[#27AE60] text-[#27AE60] hover:bg-[#27AE60] hover:text-white px-12 py-6 transition-all duration-300 hover:scale-105"
-                  style={{
-                    borderRadius: '8px',
-                    fontSize: '18px',
-                    fontFamily: 'Montserrat, sans-serif',
-                    fontWeight: 600,
-                    letterSpacing: '0.5px'
-                  }}
+                  style={{ borderRadius: '8px', fontSize: '18px', fontFamily: 'Montserrat, sans-serif', fontWeight: 600, letterSpacing: '0.5px' }}
                 >
                   <Phone className="mr-2 size-5" />
-                  Consultar por WhatsApp
+                  {t('faq.whatsappButton')}
                 </Button>
               </div>
             </div>
@@ -911,46 +802,41 @@ export default function App() {
           <div className="container mx-auto max-w-6xl px-4">
             <div className="grid md:grid-cols-3 gap-10 mb-10">
               <div className="animate-on-scroll">
-                <h3 className="text-[28px] text-[#27AE60] mb-4" style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 700, letterSpacing: '0.5px' }}>Loteo Ruta 4</h3>
+                <h3 className="text-[28px] text-[#27AE60] mb-4" style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 700, letterSpacing: '0.5px' }}>{t('footer.brand')}</h3>
                 <p className="text-[#D0D0D0] text-[16px]" style={{ fontFamily: 'Open Sans, sans-serif', lineHeight: '1.6' }}>
-                  Tu escape a Misiones. Terrenos premium con título perfecto en Ruta Provincial 4, Almafuerte.
+                  {t('footer.description')}
                 </p>
               </div>
-
               <div className="animate-on-scroll">
-                <h4 className="text-[#FFFFFF] mb-4 text-[22px]" style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 600, letterSpacing: '0.3px' }}>Contacto</h4>
+                <h4 className="text-[#FFFFFF] mb-4 text-[22px]" style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 600, letterSpacing: '0.3px' }}>{t('footer.contactTitle')}</h4>
                 <div className="space-y-3 text-[16px] text-[#D0D0D0]" style={{ fontFamily: 'Open Sans, sans-serif' }}>
                   <p className="flex items-center gap-2">
                     <Phone className="size-4 text-[#27AE60]" />
-                    <a href="https://wa.me/543764165357" className="hover:text-[#27AE60] transition-colors">
-                      +54 3764 165357
-                    </a>
+                    <a href="https://wa.me/543764165357" className="hover:text-[#27AE60] transition-colors">+54 3764 165357</a>
                   </p>
                   <p className="flex items-center gap-2">
                     <MapPin className="size-4 text-[#27AE60]" />
                     <a href="https://maps.app.goo.gl/fzaRvwUuQHL7kmFK6" target="_blank" rel="noopener noreferrer" className="hover:text-[#27AE60] transition-colors">
-                      Ruta Provincial 4, Almafuerte, Misiones
+                      {t('footer.address')}
                     </a>
                   </p>
                 </div>
               </div>
-
               <div className="animate-on-scroll">
-                <h4 className="text-[#FFFFFF] mb-4 text-[22px]" style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 600, letterSpacing: '0.3px' }}>Oferta Verano</h4>
+                <h4 className="text-[#FFFFFF] mb-4 text-[22px]" style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 600, letterSpacing: '0.3px' }}>{t('footer.summerTitle')}</h4>
                 <div className="bg-[#27AE60]/10 border border-[#27AE60] rounded-lg p-4">
                   <p className="text-[18px] text-[#FFFFFF] mb-2" style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 600 }}>
-                    ☀️Con el lote te entregamos un tanque tricapa de 600lts
+                    {t('footer.summerText')}
                   </p>
                 </div>
               </div>
             </div>
-
             <div className="border-t border-[#2a2a2a] pt-8 text-center">
               <p className="text-[16px] text-[#999999]" style={{ fontFamily: 'Open Sans, sans-serif' }}>
-                © 2026 Loteo Ruta 4 - loteoruta4.com - Todos los derechos reservados
+                {t('footer.copyright')}
               </p>
               <p className="text-[14px] text-[#777777] mt-2" style={{ fontFamily: 'Open Sans, sans-serif' }}>
-                ¡No dejes que se escapen los lotes!
+                {t('footer.tagline')}
               </p>
             </div>
           </div>
@@ -958,11 +844,11 @@ export default function App() {
 
         {/* WhatsApp Float Button */}
         <a
-          href="https://wa.me/543764165357?text=Hola,%20quiero%20información%20sobre%20lotes%20Ruta%204"
+          href={`https://wa.me/543764165357?text=${encodeURIComponent(t('whatsapp.defaultMessage'))}`}
           target="_blank"
           rel="noopener noreferrer"
           className="pulse-wa fixed bottom-6 right-6 bg-[#25D366] hover:bg-[#128C7E] text-white p-4 rounded-full shadow-2xl transition-all duration-300 hover:scale-110 z-50"
-          aria-label="Contactar por WhatsApp"
+          aria-label={t('whatsapp.ariaLabel')}
         >
           <Phone className="size-6" />
         </a>

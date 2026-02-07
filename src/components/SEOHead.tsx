@@ -1,4 +1,6 @@
+import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useTranslation } from 'react-i18next';
 import loteoVistaGeneral from '../assets/loteo_vista_general_1.jpeg';
 
 interface SEOHeadProps {
@@ -8,50 +10,51 @@ interface SEOHeadProps {
   url?: string;
 }
 
-export function SEOHead({ 
-  title = 'Loteo Ruta 4 - Terrenos de 1000m² en Misiones desde USD 5,000',
-  description = 'Terrenos de 1000m² en Misiones desde USD 5,000. Loteo Ruta 4 con título, asfalto, agua y naturaleza. Solo quedan pocos lotes disponibles.',
+export function SEOHead({
+  title,
+  description,
   image = loteoVistaGeneral,
   url = 'https://loteoruta4.com'
 }: SEOHeadProps) {
-  // Handle both imported images (Vite) and URL strings
-  const fullImageUrl = typeof image === 'string' 
+  const { t, i18n } = useTranslation();
+  const resolvedTitle = title ?? t('seo.title');
+  const resolvedDescription = description ?? t('seo.description');
+  const locale = i18n.language === 'en' ? 'en_US' : 'es_AR';
+  const htmlLang = i18n.language === 'en' ? 'en' : 'es';
+
+  useEffect(() => {
+    document.documentElement.lang = htmlLang;
+  }, [htmlLang]);
+
+  const fullImageUrl = typeof image === 'string'
     ? (image.startsWith('http') ? image : `${url}${image}`)
     : `${url}/assets/loteo_vista_general_1.jpeg`;
 
   return (
     <Helmet>
-      {/* Primary Meta Tags */}
-      <title>{title}</title>
-      <meta name="title" content={title} />
-      <meta name="description" content={description} />
-
-      {/* Open Graph / Facebook */}
+      <html lang={htmlLang} />
+      <title>{resolvedTitle}</title>
+      <meta name="title" content={resolvedTitle} />
+      <meta name="description" content={resolvedDescription} />
       <meta property="og:type" content="product" />
       <meta property="og:url" content={url} />
-      <meta property="og:title" content={title} />
-      <meta property="og:description" content={description} />
+      <meta property="og:title" content={resolvedTitle} />
+      <meta property="og:description" content={resolvedDescription} />
       <meta property="og:image" content={fullImageUrl} />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
-      <meta property="og:locale" content="es_AR" />
-      <meta property="og:site_name" content="Loteo Ruta 4" />
-
-      {/* Product specific meta tags */}
+      <meta property="og:locale" content={locale} />
+      <meta property="og:site_name" content={t('seo.siteName')} />
       <meta property="product:price:amount" content="5000" />
       <meta property="product:price:currency" content="USD" />
       <meta property="product:availability" content="in stock" />
       <meta property="product:condition" content="new" />
-      <meta property="product:retailer" content="Loteo Ruta 4" />
-
-      {/* Twitter Card */}
+      <meta property="product:retailer" content={t('seo.siteName')} />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:url" content={url} />
-      <meta name="twitter:title" content={title} />
-      <meta name="twitter:description" content={description} />
+      <meta name="twitter:title" content={resolvedTitle} />
+      <meta name="twitter:description" content={resolvedDescription} />
       <meta name="twitter:image" content={fullImageUrl} />
-
-      {/* Additional Meta Tags */}
       <meta name="geo.region" content="AR-N" />
       <meta name="geo.placename" content="Misiones" />
       <meta name="geo.position" content="-27.523444;-55.448548" />
@@ -59,5 +62,3 @@ export function SEOHead({
     </Helmet>
   );
 }
-
-

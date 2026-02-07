@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface CurrencyData {
   oficial: {
@@ -25,9 +26,11 @@ interface CurrencyData {
 }
 
 export function useCurrencyConversion(usdAmount: number = 5000) {
+  const { t, i18n } = useTranslation();
   const [data, setData] = useState<CurrencyData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const locale = i18n.language === 'en' ? 'en-US' : 'es-AR';
 
   useEffect(() => {
     const fetchCurrencyData = async () => {
@@ -36,14 +39,14 @@ export function useCurrencyConversion(usdAmount: number = 5000) {
         const response = await fetch('https://api.bluelytics.com.ar/v2/latest');
 
         if (!response.ok) {
-          throw new Error('Error al obtener datos de cotización');
+          throw new Error(t('currency.errorFetch'));
         }
 
         const currencyData: CurrencyData = await response.json();
         setData(currencyData);
         setError(null);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Error desconocido');
+        setError(err instanceof Error ? err.message : t('currency.errorUnknown'));
         // Fallback data en caso de error
         setData({
           oficial: { value_avg: 1439.50, value_sell: 1465.00, value_buy: 1414.00 },
@@ -71,7 +74,7 @@ export function useCurrencyConversion(usdAmount: number = 5000) {
   };
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('es-AR', {
+    return new Intl.NumberFormat(locale, {
       style: 'currency',
       currency: 'ARS',
       minimumFractionDigits: 0,
@@ -80,7 +83,7 @@ export function useCurrencyConversion(usdAmount: number = 5000) {
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleString('es-AR', {
+    return new Date(dateString).toLocaleString(locale, {
       day: '2-digit',
       month: '2-digit',
       year: 'numeric',
