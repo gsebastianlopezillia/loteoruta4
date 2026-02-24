@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { useCurrencyConversion } from '../hooks/useCurrencyConversion';
+import { Button } from './ui/button';
 
 interface LoteCardProps {
   numero: number;
@@ -240,6 +242,17 @@ export function LoteCard({ numero, superficie, precioUSD, dimensiones, forma, es
           >
             {dimensiones}
           </p>
+          {isDisponible && precioUSD > 0 && (
+            <Link to={`/calculadora?lote=${numero}&precio=${precioUSD}`} className="mt-4 inline-block">
+              <Button
+                variant="outline"
+                className="border-[#27AE60] text-[#27AE60] hover:bg-[#27AE60] hover:text-white"
+                style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 600, fontSize: '14px' }}
+              >
+                {t('calculator.simularCuotas')}
+              </Button>
+            </Link>
+          )}
         </div>
 
         {/* Columna derecha: Ícono geométrico solo */}

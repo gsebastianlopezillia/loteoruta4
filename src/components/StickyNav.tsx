@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link, useLocation } from 'react-router-dom';
 import { Phone, ChevronDown } from 'lucide-react';
 import 'react-flagpack/dist/style.css';
 
@@ -22,9 +23,11 @@ function FlagIcon({ code, size = 's' }: { code: string; size?: 's' | 'm' | 'l' }
 
 export function StickyNav() {
   const { t, i18n } = useTranslation();
+  const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
   const langMenuRef = useRef<HTMLDivElement>(null);
+  const isHome = location.pathname === '/';
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -43,6 +46,7 @@ export function StickyNav() {
   }, []);
 
   const scrollToSection = (id: string) => {
+    if (!isHome) return;
     const element = document.getElementById(id);
     if (element) {
       const offset = 80;
@@ -78,24 +82,36 @@ export function StickyNav() {
       <div className="container mx-auto max-w-7xl px-4">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
-            <h3
+            <Link
+              to="/"
               className="text-[20px] text-[#27AE60] cursor-pointer hover:text-[#2ECC71] transition-colors"
               style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 700, letterSpacing: '0.5px' }}
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              onClick={() => isHome && window.scrollTo({ top: 0, behavior: 'smooth' })}
             >
               {t('nav.brand')}
-            </h3>
+            </Link>
           </div>
           <div className="hidden lg:flex items-center gap-1">
             {navItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => scrollToSection(item.id)}
-                className="px-3 py-2 text-[14px] text-[#D0D0D0] hover:text-[#27AE60] transition-colors rounded-lg hover:bg-[#27AE60]/10"
-                style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400 }}
-              >
-                {t(item.labelKey)}
-              </button>
+              isHome ? (
+                <button
+                  key={item.id}
+                  onClick={() => scrollToSection(item.id)}
+                  className="px-3 py-2 text-[14px] text-[#D0D0D0] hover:text-[#27AE60] transition-colors rounded-lg hover:bg-[#27AE60]/10"
+                  style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400 }}
+                >
+                  {t(item.labelKey)}
+                </button>
+              ) : (
+                <Link
+                  key={item.id}
+                  to={`/#${item.id}`}
+                  className="px-3 py-2 text-[14px] text-[#D0D0D0] hover:text-[#27AE60] transition-colors rounded-lg hover:bg-[#27AE60]/10"
+                  style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400 }}
+                >
+                  {t(item.labelKey)}
+                </Link>
+              )
             ))}
           </div>
           <div className="flex items-center gap-3">
