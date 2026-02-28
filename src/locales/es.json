@@ -19,23 +19,29 @@
   "banner": {
     "summerOffer": "🌞 OFERTA VERANO: con el lote te entregamos un tanque tricapa de 600lts 🌞"
   },
+  "countdown": {
+    "days": "Días",
+    "hours": "Horas",
+    "minutes": "Min",
+    "seconds": "Seg"
+  },
   "hero": {
     "title": "Loteo Ruta 4: Tu terreno de 1000m² en Misiones",
     "subtitle": "con Título, Asfalto, Agua",
     "cta": "RESERVAR MI LOTE",
-    "lotsLeft": "Solo quedan {{count}} lotes disponibles"
+    "lotsLeft": "¡Últimos {{count}} lotes! Se agotan rápido — reservá ahora"
   },
   "garantias": {
     "headline": "¿Harto de ver tu plata evaporarse en alquiler o inflación en la ciudad?",
     "introBefore": "Imaginate jubilado o trabajando remote en tu propio paraíso: monte nativo fresco, arroyo a 200m para refrescarte, ",
     "introHighlight": "1000m² que parecen un reino",
-    "introAfter": " (gigante para citadinos, ideal para casa familiar o inversión).",
+    "introAfter": " (ideal para casa familiar o inversión).",
     "title": "Garantías absolutas:",
-    "item1": "Título listo para escriturar ya - Sin complicaciones legales",
-    "item2": "Ruta asfaltada frente - No precisás camioneta ni 4x4",
+    "item1": "Título listo para escriturar - Tratas con los titulares directos",
+    "item2": "Ruta asfaltada frente - No precisás una 4x4",
     "item3": "Servicios agua/luz en puerta - Listo para construir",
     "item4": "Escuela/colectivo a 150m - Ideal para familias",
-    "item5": "4km de Bonpland y 15km de Oberá - Cerca de todo sin ruido"
+    "item5": "4km de Bonpland y 15km de Alem - Cerca de todo sin ruido"
   },
   "ubicacion": {
     "title": "Ubicación",
@@ -46,9 +52,9 @@
     "card1Desc": "Acceso fácil todo el año y alta valorización a futuro",
     "card2Title": "A 150m de escuela y parada de colectivo",
     "card2Desc": "Ideal para familias con niños o proyectos comunitarios",
-    "card3Title": "200m de arroyo",
+    "card3Title": "arroyo a 200m",
     "card3Desc": "Naturaleza pura para refrescarte y conectar con el entorno",
-    "card4Title": "4km de Bonpland, 15km de Oberá",
+    "card4Title": "4km de Bonpland, 15km de Alem",
     "card4Desc": "Cerca de servicios y comercios sin el ruido de la ciudad"
   },
   "lotes": {
@@ -60,7 +66,9 @@
   "loteCard": {
     "lote": "Lote",
     "sold": "VENDIDO",
-    "loading": "Cargando..."
+    "loading": "Cargando...",
+    "reservar": "Reservar este lote",
+    "whatsappMessage": "Hola, me interesa el Lote {{numero}} (USD {{precio}})."
   },
   "common": {
     "surfaceValue": "1000 mts²",
@@ -72,7 +80,7 @@
     "title": "¿Por qué",
     "titleHighlight": "Loteo Ruta 4?",
     "subtitle": "Todo lo que necesitás para tu proyecto de vida o inversión",
-    "1title": "Monte Nativo Recuperado",
+    "1title": "Monte Nativo en Recuperación",
     "1desc": "Sombra natural, frescura y ecosistema vivo para disfrutar todo el año",
     "2title": "Suelo Premium",
     "2desc": "6a pedregoso que filtra, al ser en pendiente, imposible inundación",
@@ -100,7 +108,7 @@
       "1desc": "Ruta 4 asfaltada y naturaleza en perfecta armonía desde las alturas",
       "2title": "Caminos internos",
       "2desc": "Accesos mantenidos y delimitados entre lotes para facilitar la circulación",
-      "3title": "Monte nativo recuperado",
+      "3title": "Monte nativo en recuperación",
       "3desc": "Vegetación autóctona y flores silvestres en plena recuperación",
       "4title": "Acceso principal",
       "4desc": "Entrada principal al loteo con diseño integrado al paisaje natural",
@@ -121,7 +129,8 @@
     }
   },
   "video": {
-    "title": "Recorrido virtual del loteo"
+    "title": "Recorrido virtual del loteo",
+    "cta": "¿Te convenció? Consultá por WhatsApp"
   },
   "testimonials": {
     "title": "Lo que dicen quienes",
@@ -130,15 +139,15 @@
     "next": "Siguiente testimonio",
     "goTo": "Ir a testimonio {{index}}",
     "1text": "El lote está ubicado en un lugar estratégico y accesible, de facil acceso a la ruta asfaltada y en auto. Conectando con la ciudad y otros puntos de interés. Ideal para vivienda y quinta y proyectos al aire libre.",
-    "1subtitle": "Directora de escuela - La Plata",
+    "1subtitle": "M.G., Directora de escuela - La Plata",
     "2text": "Un trámite super sencillo, un placer hacer negocio con los chicos.",
-    "2subtitle": "Inversor - Buenos Aires",
+    "2subtitle": "C.R., Inversor - Buenos Aires",
     "3text": "Estoy muy feliz con el terreno, tengo varios frutales y buena sombra de los pinos para hacer mi cabañita.",
-    "3subtitle": "Camionero - San Luis",
+    "3subtitle": "J.M., Camionero - San Luis",
     "4text": "La parte alta del lote ofrece una vista única con panorámica de la zona verde de Almafuerte.",
-    "4subtitle": "Particular - Posadas",
+    "4subtitle": "L.P., Particular - Posadas",
     "5text": "Puedo calificar de excelente mí experiencia como comprador de un lote! Agradecido por la atención y predisposición de los propietarios. Terrenos amplios, con una buena ubicación, con múltiples posibilidades!",
-    "5subtitle": "Particular - Los Helechos"
+    "5subtitle": "R.H., Particular - Los Helechos"
   },
   "cta": {
     "title": "¿Listo para una",
@@ -163,26 +172,33 @@
     "q3": "¿Tienen título individual listo para escriturar?",
     "a3": "Sí, todos tienen título individual y están listos para transferir. Somos titulares directos con mi esposa.",
     "q4": "¿Cómo es el proceso de compra?",
-    "a4step1": "1. Reserva con seña del 20% (se descuenta del total).",
+    "a4step1": "1. Reserva con seña del 20% que será descontada del total.",
     "a4p1": "Esto puede ser por transferencia o en efectivo en la escribanía de elección y se firma la documentación de seña y compromiso de reserva de tierra.",
     "a4step2": "2. La escribanía solicita todos los certificados correspondientes (de dominio e inhibiciones en Rentas).",
     "a4step3": "3. Se escritura tras salida de certificados (general 15-20 días).",
-    "a4p2": "Trabajamos con la escribanía Lombardi de Posadas (Av. Roque Pérez 1615). Podemos cambiar si el comprador prefiere otra.",
+    "a4p2": "",
     "a4expenses": "Gastos incluidos:",
     "a4li1": "50% del Impuesto de Sellos",
-    "a4li2": "Certificados administrativos y gastos de protocolo y minutas",
-    "a4li3": "Tasa de Inscripción y derecho de escritura de compraventa",
-    "a4li4": "Tasa de Inscripción y derecho de escritura de constitución de usufructo",
-    "a4li5": "Honorarios de compraventa",
     "q5": "¿Qué formas de pago aceptan?",
     "a5p1": "Contado en cualquier moneda: pesos argentinos, dólares, guaraníes, reales, USDT, Bitcoin, etc.",
-    "a5p2": "No financiación por el momento.",
+    "a5p2": "Financiación en UVA (Unidad de Valor Adquisitivo) hasta 24 cuotas.",
     "q6": "¿Es tranquilo y seguro el lugar?",
     "a6": "Súper tranquilo y seguro. Es una zona rural muy familiar, hay varias casas alrededor, escuela enfrente, vecinos permanentes."
   },
+  "emailForm": {
+    "title": "¿Sin WhatsApp?",
+    "subtitle": "Dejanos tu email y te contactamos",
+    "placeholder": "tu@email.com",
+    "submit": "Enviar"
+  },
+  "trustBadges": {
+    "titulo": "Título listo",
+    "escritura": "Escrituración directa",
+    "servicios": "Servicios en puerta"
+  },
   "footer": {
     "brand": "Loteo Ruta 4",
-    "description": "Tu escape a Misiones. Terrenos premium con título perfecto en Ruta Provincial 4, Almafuerte.",
+    "description": "Tu refugio en Misiones. Terrenos premium con título perfecto en Ruta Provincial 4, Almafuerte.",
     "contactTitle": "Contacto",
     "address": "Ruta Provincial 4, Almafuerte, Misiones",
     "summerTitle": "Oferta Verano",
@@ -214,7 +230,7 @@
     "faq4q": "¿Cómo es el proceso de compra?",
     "faq4a": "1. Reserva con seña del 20% (se descuenta del total). 2. La escribanía solicita todos los certificados correspondientes. 3. Se escritura tras salida de certificados (general 15-20 días). Trabajamos con la escribanía Lombardi de Posadas.",
     "faq5q": "¿Qué formas de pago aceptan?",
-    "faq5a": "Contado en cualquier moneda: pesos argentinos, dólares, guaraníes, reales, USDT, Bitcoin, etc. No financiación por el momento.",
+    "faq5a": "Contado en cualquier moneda: pesos argentinos, dólares, guaraníes, reales, USDT, Bitcoin, etc. Financiación en UVA hasta 24 cuotas.",
     "faq6q": "¿Es tranquilo y seguro el lugar?",
     "faq6a": "Súper tranquilo y seguro. Es una zona rural muy familiar, hay varias casas alrededor, escuela enfrente, vecinos permanentes.",
     "propertySurface": "Superficie",
@@ -230,5 +246,42 @@
     "loading": "Cargando...",
     "errorFetch": "Error al obtener datos de cotización",
     "errorUnknown": "Error desconocido"
+  },
+  "calculator": {
+    "title": "Calculadora de Financiación Privada UVA",
+    "subtitle": ".",
+    "lotePrice": "Precio del lote (USD)",
+    "valorUVA": "Valor UVA hoy",
+    "dolarMEP": "Dólar MEP hoy (BCRA, referencia para convertir USD a pesos)",
+    "plazo": "Cantidad de cuotas",
+    "plazoEditable": "Elegí 6, 12, 18 o 24 cuotas",
+    "cuotas": "cuotas",
+    "tasaMensual": "Tasa mensual",
+    "tasaAnual": "anual",
+    "calcular": "Calcular cuota y amortización",
+    "resultados": "Resultados",
+    "montoPesos": "Monto en pesos",
+    "uvasTotales": "Monto expresado en __UVA_LINK__",
+    "cuotaUVAs": "Cuota fija en UVAs",
+    "cuotaPesos": "Cuota en $ (UVA vto.)",
+    "plazoMeses": "Plazo",
+    "cuotaNum": "Cuota #",
+    "cuotaUVAsCol": "Cuota (UVAs)",
+    "cuotaPesosCol": "Cuota en $ (UVA vto.)",
+    "interes": "Interés ($)",
+    "amort": "Amort. ($)",
+    "saldoUVAs": "Saldo UVAs",
+    "saldoPesos": "Saldo $",
+    "nota": "Monto expresado en __UVA_LINK__. Cuota fija en UVAs. Interés = saldo UVAs × i. Amort = Cuota − Interés. Cuota $ = Cuota_UVAs × UVA vencimiento.",
+    "tablaDisclaimer": "La cuota en UVAs es fija. El valor en pesos de las cuotas está sujeto al valor de la UVA en el mes de pago de cada cuota. Los montos en pesos mostrados son estimativos y corresponden a la UVA del día de la simulación.",
+    "queEsUVA": "La UVA (Unidad de Valor Adquisitivo) es un índice que refleja la evolución de la inflación y se actualiza diariamente. __UVA_BCRA_LINK__.",
+    "uvaLinkText": "Ver explicación del BCRA",
+    "apiStatusOk": "UVA y cotización dólar de BCRA.",
+    "apiStatusError": "No se pudieron cargar UVA/dólar del BCRA. Usá valores manuales.",
+    "completarDatos": "Completá UVA, MEP (o precio del lote) y plazo.",
+    "simularCuotas": "Simular cuotas",
+    "whatsappCta": "Consultar por WhatsApp",
+    "whatsappCtaMessage": "Hola, simule el Lote {{numero}} en cuotas UVA. Quiero reservar.",
+    "whatsappCtaMessageNoLote": "Hola, simule la financiación UVA. Quiero reservar un lote."
   }
 }

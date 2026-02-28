@@ -86,6 +86,13 @@ export function StructuredData({ lotesDisponibles, precioMinimoUSD = 5000 }: Str
       "url": baseUrl
     },
     "category": "Real Estate",
+    "review": [
+      { "@type": "Review", "author": { "@type": "Person", "name": t('testimonials.1subtitle') }, "reviewBody": t('testimonials.1text'), "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5", "worstRating": "1" } },
+      { "@type": "Review", "author": { "@type": "Person", "name": t('testimonials.2subtitle') }, "reviewBody": t('testimonials.2text'), "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5", "worstRating": "1" } },
+      { "@type": "Review", "author": { "@type": "Person", "name": t('testimonials.3subtitle') }, "reviewBody": t('testimonials.3text'), "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5", "worstRating": "1" } },
+      { "@type": "Review", "author": { "@type": "Person", "name": t('testimonials.4subtitle') }, "reviewBody": t('testimonials.4text'), "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5", "worstRating": "1" } },
+      { "@type": "Review", "author": { "@type": "Person", "name": t('testimonials.5subtitle') }, "reviewBody": t('testimonials.5text'), "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5", "worstRating": "1" } }
+    ],
     "additionalProperty": [
       { "@type": "PropertyValue", "name": t('structuredData.propertySurface'), "value": t('structuredData.propertySurfaceValue') },
       { "@type": "PropertyValue", "name": t('structuredData.propertyLocation'), "value": t('structuredData.propertyLocationValue') },
@@ -126,7 +133,7 @@ export function StructuredData({ lotesDisponibles, precioMinimoUSD = 5000 }: Str
     "aggregateRating": {
       "@type": "AggregateRating",
       "ratingValue": "5",
-      "reviewCount": "3",
+      "reviewCount": "5",
       "bestRating": "5",
       "worstRating": "1"
     }

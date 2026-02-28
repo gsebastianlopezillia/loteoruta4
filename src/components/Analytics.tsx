@@ -74,6 +74,17 @@ declare global {
   interface Window {
     dataLayer: any[];
     gtag: (...args: any[]) => void;
+    fbq?: (...args: unknown[]) => void;
+  }
+}
+
+export function trackWhatsAppClick(ctaLocation: string) {
+  if (typeof window === 'undefined') return;
+  if (window.gtag) {
+    window.gtag('event', 'whatsapp_click', { cta_location: ctaLocation });
+  }
+  if (window.fbq) {
+    window.fbq('track', 'Contact');
   }
 }
 

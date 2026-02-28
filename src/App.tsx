@@ -1,16 +1,14 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { CountdownTimer } from './components/CountdownTimer';
+import { Routes, Route } from 'react-router-dom';
 import { LoteCard } from './components/LoteCard';
 import { BenefitCard } from './components/BenefitCard';
-import { StickyNav } from './components/StickyNav';
+import { Layout } from './components/Layout';
 import { SEOHead } from './components/SEOHead';
 import { StructuredData } from './components/StructuredData';
-import { Analytics } from './components/Analytics';
-import { useCurrencyConversion } from './hooks/useCurrencyConversion';
+import { Analytics, trackWhatsAppClick } from './components/Analytics';
 import { FAQItem } from './components/FAQItem';
 import { Button } from './components/ui/button';
-import { Badge } from './components/ui/badge';
 import {
   MapPin,
   Trees,
@@ -20,7 +18,6 @@ import {
   FileCheck,
   ChevronLeft,
   ChevronRight,
-  AlertCircle,
   TrendingUp,
   Sprout,
   Building2,
@@ -38,6 +35,8 @@ import loteoAreaVerde from './assets/loteo_area_verde_9.jpeg';
 import loteoBiodiversidad from './assets/loteo_biodiversidad_10.jpeg';
 import loteoEspaciosNaturales from './assets/loteo_espacios_naturales_11.jpeg';
 import loteoUbicacionEstrategica from './assets/loteo_ubicacion_estrategica_12.jpeg';
+import { lotes } from './data/lotes';
+import { CalculadoraUVA } from './pages/CalculadoraUVA';
 
 const galleryUrls = [
   loteoVistaGeneral,
@@ -52,123 +51,6 @@ const galleryUrls = [
   loteoBiodiversidad,
   loteoEspaciosNaturales,
   loteoUbicacionEstrategica
-];
-
-const lotes = [
-  // Lotes disponibles primero (10-14)
-  {
-    numero: 10,
-    superficie: '1000 mts²',
-    precio: 5000,
-    dimensiones: '12x80',
-    forma: 'rectangular' as const,
-    estado: 'disponible' as const
-  },
-  {
-    numero: 11,
-    superficie: '1000 mts²',
-    precio: 5000,
-    dimensiones: '12x80',
-    forma: 'rectangular' as const,
-    estado: 'vendido' as const
-  },
-  {
-    numero: 12,
-    superficie: '1000 mts²',
-    precio: 5000,
-    dimensiones: '12x80',
-    forma: 'rectangular' as const,
-    estado: 'disponible' as const
-  },
-  {
-    numero: 13,
-    superficie: '1000 mts²',
-    precio: 5000,
-    dimensiones: '12x80',
-    forma: 'rectangular' as const,
-    estado: 'disponible' as const
-  },
-  {
-    numero: 14,
-    superficie: '1000 mts²',
-    precio: 6000,
-    dimensiones: '12x80',
-    forma: 'rectangular' as const,
-    estado: 'disponible' as const
-  },
-  // Lotes vendidos (1-9)
-  {
-    numero: 1,
-    superficie: '1000 mts²',
-    precio: 5000,
-    dimensiones: '17x20x17',
-    forma: 'triangular' as const,
-    estado: 'vendido' as const
-  },
-  {
-    numero: 2,
-    superficie: '1000 mts²',
-    precio: 5000,
-    dimensiones: '12x80',
-    forma: 'rectangular' as const,
-    estado: 'vendido' as const
-  },
-  {
-    numero: 3,
-    superficie: '1000 mts²',
-    precio: 5000,
-    dimensiones: '12x80',
-    forma: 'rectangular' as const,
-    estado: 'vendido' as const
-  },
-  {
-    numero: 4,
-    superficie: '1000 mts²',
-    precio: 5000,
-    dimensiones: '12x80',
-    forma: 'rectangular' as const,
-    estado: 'vendido' as const
-  },
-  {
-    numero: 5,
-    superficie: '1000 mts²',
-    precio: 5000,
-    dimensiones: '12x80',
-    forma: 'rectangular' as const,
-    estado: 'vendido' as const
-  },
-  {
-    numero: 6,
-    superficie: '1000 mts²',
-    precio: 5000,
-    dimensiones: '12x80',
-    forma: 'rectangular' as const,
-    estado: 'vendido' as const
-  },
-  {
-    numero: 7,
-    superficie: '1000 mts²',
-    precio: 5000,
-    dimensiones: '12x80',
-    forma: 'rectangular' as const,
-    estado: 'vendido' as const
-  },
-  {
-    numero: 8,
-    superficie: '1000 mts²',
-    precio: 5000,
-    dimensiones: '12x80',
-    forma: 'rectangular' as const,
-    estado: 'vendido' as const
-  },
-  {
-    numero: 9,
-    superficie: '1000 mts²',
-    precio: 5000,
-    dimensiones: '12x80',
-    forma: 'rectangular' as const,
-    estado: 'vendido' as const
-  }
 ];
 
 function useScrollAnimation() {
@@ -193,13 +75,12 @@ function useScrollAnimation() {
   }, []);
 }
 
-export default function App() {
+function HomeContent() {
   const { t } = useTranslation();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const [showAllLotes, setShowAllLotes] = useState(false);
   const [currentTestimonialIndex, setCurrentTestimonialIndex] = useState(0);
-  const { getPriceInARS, formatCurrency, loading } = useCurrencyConversion(5000);
 
   const galleryImages = useMemo(() => galleryUrls.map((url, i) => ({
     url,
@@ -217,7 +98,8 @@ export default function App() {
     setIsVisible(true);
   }, []);
 
-  const handleWhatsAppMain = () => {
+  const handleWhatsAppMain = (location: string) => {
+    trackWhatsAppClick(location);
     const message = encodeURIComponent(t('whatsapp.defaultMessage'));
     window.open(`https://wa.me/543764165357?text=${message}`, '_blank');
   };
@@ -234,34 +116,6 @@ export default function App() {
 
   return (
     <>
-      <SEOHead />
-      <StructuredData lotesDisponibles={lotesDisponibles} precioMinimoUSD={5000} />
-      <Analytics gscVerification={import.meta.env.VITE_GSC_VERIFICATION} />
-      <div className="min-h-screen bg-[#0a0a0a] text-[#FFFFFF]" style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: '16px' }}>
-        <header>
-          {/* Navegación Sticky */}
-          <StickyNav />
-
-          {/* Espacio para compensar header sticky */}
-          <div className="h-16 bg-[#0a0a0a]"></div>
-
-          {/* Banner Superior Animado */}
-          <div className="bg-gradient-to-r from-[#004D40] via-[#27AE60] to-[#004D40] overflow-hidden relative shadow-lg" style={{ height: '58px', display: 'flex', alignItems: 'center' }}>
-            <div className="animate-scroll whitespace-nowrap">
-              <span className="inline-block px-8 text-white" style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 700, fontSize: '16px', letterSpacing: '0.5px' }}>
-                {t('banner.summerOffer')}
-              </span>
-              <span className="inline-block px-8 text-white" style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 700, fontSize: '16px', letterSpacing: '0.5px' }}>
-                {t('banner.summerOffer')}
-              </span>
-              <span className="inline-block px-8 text-white" style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 700, fontSize: '16px', letterSpacing: '0.5px' }}>
-                {t('banner.summerOffer')}
-              </span>
-            </div>
-          </div>
-        </header>
-
-        <main>
           {/* Hero Section */}
           <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
             <div
@@ -278,20 +132,20 @@ export default function App() {
               <h1 className="text-[72px] md:text-[100px] leading-[1.2] text-[#FFFFFF] mb-6 max-w-5xl mx-auto" style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 700, letterSpacing: '0.5px', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
                 {t('hero.title')}
               </h1>
-              <p className="text-[20px] text-[#FFFFFF] mb-8 max-w-3xl mx-auto" style={{ fontFamily: 'Open Sans, sans-serif', lineHeight: '1.6' }}>
+              <p className="text-[20px] text-[#FFFFFF] mb-6 max-w-3xl mx-auto" style={{ fontFamily: 'Open Sans, sans-serif', lineHeight: '1.6' }}>
                 {t('hero.subtitle')}
               </p>
+              <p className="text-[22px] md:text-[26px] text-[#FFFFFF] mb-8 font-bold max-w-2xl mx-auto px-6 py-4 rounded-xl bg-[#27AE60]/25 border-2 border-[#27AE60]" style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 700, letterSpacing: '0.4px', textShadow: '0 2px 8px rgba(0,0,0,0.4)' }}>
+                {t('hero.lotsLeft', { count: lotesDisponibles })}
+              </p>
               <Button
-                onClick={handleWhatsAppMain}
+                onClick={() => handleWhatsAppMain('hero')}
                 className="bg-[#27AE60] hover:bg-[#1e8449] text-white px-16 py-8 transition-all duration-300 hover:scale-[1.08] shadow-2xl shadow-[#27AE60]/50"
                 style={{ borderRadius: '8px', fontSize: '20px', fontFamily: 'Montserrat, sans-serif', fontWeight: 600, letterSpacing: '0.5px' }}
               >
                 <Phone className="mr-2 size-5" />
                 {t('hero.cta')}
               </Button>
-              <p className="mt-8 text-[16px] text-[#A0A0A0]" style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 300, lineHeight: '1.5' }}>
-                {t('hero.lotsLeft', { count: lotesDisponibles })}
-              </p>
             </div>
 
             <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
@@ -354,7 +208,7 @@ export default function App() {
               <div className="grid md:grid-cols-2 gap-8 items-start">
                 <div className="animate-on-scroll bg-[#121212] rounded-xl overflow-hidden border border-[#2a2a2a] h-[450px] shadow-xl">
                   <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3538.2!2d-55.448548!3d-27.523444!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjfCsDMxJzI0LjQiUyA1NcKwMjYnNTQuNSJX!5e0!3m2!1ses!2sar!4v1234567890"
+                    src="https://maps.google.com/maps?q=-27.523444,-55.448548&z=15&output=embed"
                     width="100%"
                     height="100%"
                     style={{ border: 0 }}
@@ -637,6 +491,16 @@ export default function App() {
                     allowFullScreen
                   />
                 </div>
+                <div className="mt-6 text-center">
+                  <Button
+                    onClick={() => handleWhatsAppMain('video')}
+                    className="bg-[#27AE60] hover:bg-[#1e8449] text-white px-10 py-6 transition-all duration-300 hover:scale-105"
+                    style={{ borderRadius: '8px', fontSize: '18px', fontFamily: 'Montserrat, sans-serif', fontWeight: 600 }}
+                  >
+                    <Phone className="mr-2 size-5 inline" />
+                    {t('video.cta')}
+                  </Button>
+                </div>
               </div>
             </div>
           </section>
@@ -702,7 +566,7 @@ export default function App() {
                 {t('cta.title')} <span className="text-[#27AE60]">{t('cta.titleHighlight')}</span>
               </h2>
               <Button
-                onClick={handleWhatsAppMain}
+                onClick={() => handleWhatsAppMain('cta_final')}
                 className="animate-on-scroll bg-[#27AE60] hover:bg-[#1e8449] text-white px-16 py-8 transition-all duration-300 hover:scale-[1.08] shadow-2xl shadow-[#27AE60]/40"
                 style={{ borderRadius: '60px', fontSize: '20px', fontFamily: 'Montserrat, sans-serif', fontWeight: 600, letterSpacing: '0.5px' }}
               >
@@ -760,10 +624,6 @@ export default function App() {
                       <p className="mt-4"><strong>{t('faq.a4expenses')}</strong></p>
                       <ul className="space-y-1 ml-4">
                         <li>• {t('faq.a4li1')}</li>
-                        <li>• {t('faq.a4li2')}</li>
-                        <li>• {t('faq.a4li3')}</li>
-                        <li>• {t('faq.a4li4')}</li>
-                        <li>• {t('faq.a4li5')}</li>
                       </ul>
                     </div>
                   </FAQItem>
@@ -785,7 +645,7 @@ export default function App() {
                   {t('faq.moreQuestions')}
                 </p>
                 <Button
-                  onClick={handleWhatsAppMain}
+                  onClick={() => handleWhatsAppMain('faq')}
                   className="animate-on-scroll bg-transparent border-2 border-[#27AE60] text-[#27AE60] hover:bg-[#27AE60] hover:text-white px-12 py-6 transition-all duration-300 hover:scale-105"
                   style={{ borderRadius: '8px', fontSize: '18px', fontFamily: 'Montserrat, sans-serif', fontWeight: 600, letterSpacing: '0.5px' }}
                 >
@@ -795,64 +655,21 @@ export default function App() {
               </div>
             </div>
           </section>
-        </main>
+    </>
+  );
+}
 
-        {/* Footer */}
-        <footer className="bg-[#000000] py-20 border-t border-[#2a2a2a]" id="contacto">
-          <div className="container mx-auto max-w-6xl px-4">
-            <div className="grid md:grid-cols-3 gap-10 mb-10">
-              <div className="animate-on-scroll">
-                <h3 className="text-[28px] text-[#27AE60] mb-4" style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 700, letterSpacing: '0.5px' }}>{t('footer.brand')}</h3>
-                <p className="text-[#D0D0D0] text-[16px]" style={{ fontFamily: 'Open Sans, sans-serif', lineHeight: '1.6' }}>
-                  {t('footer.description')}
-                </p>
-              </div>
-              <div className="animate-on-scroll">
-                <h4 className="text-[#FFFFFF] mb-4 text-[22px]" style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 600, letterSpacing: '0.3px' }}>{t('footer.contactTitle')}</h4>
-                <div className="space-y-3 text-[16px] text-[#D0D0D0]" style={{ fontFamily: 'Open Sans, sans-serif' }}>
-                  <p className="flex items-center gap-2">
-                    <Phone className="size-4 text-[#27AE60]" />
-                    <a href="https://wa.me/543764165357" className="hover:text-[#27AE60] transition-colors">+54 3764 165357</a>
-                  </p>
-                  <p className="flex items-center gap-2">
-                    <MapPin className="size-4 text-[#27AE60]" />
-                    <a href="https://maps.app.goo.gl/fzaRvwUuQHL7kmFK6" target="_blank" rel="noopener noreferrer" className="hover:text-[#27AE60] transition-colors">
-                      {t('footer.address')}
-                    </a>
-                  </p>
-                </div>
-              </div>
-              <div className="animate-on-scroll">
-                <h4 className="text-[#FFFFFF] mb-4 text-[22px]" style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 600, letterSpacing: '0.3px' }}>{t('footer.summerTitle')}</h4>
-                <div className="bg-[#27AE60]/10 border border-[#27AE60] rounded-lg p-4">
-                  <p className="text-[18px] text-[#FFFFFF] mb-2" style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 600 }}>
-                    {t('footer.summerText')}
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="border-t border-[#2a2a2a] pt-8 text-center">
-              <p className="text-[16px] text-[#999999]" style={{ fontFamily: 'Open Sans, sans-serif' }}>
-                {t('footer.copyright')}
-              </p>
-              <p className="text-[14px] text-[#777777] mt-2" style={{ fontFamily: 'Open Sans, sans-serif' }}>
-                {t('footer.tagline')}
-              </p>
-            </div>
-          </div>
-        </footer>
-
-        {/* WhatsApp Float Button */}
-        <a
-          href={`https://wa.me/543764165357?text=${encodeURIComponent(t('whatsapp.defaultMessage'))}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="pulse-wa fixed bottom-6 right-6 bg-[#25D366] hover:bg-[#128C7E] text-white p-4 rounded-full shadow-2xl transition-all duration-300 hover:scale-110 z-50"
-          aria-label={t('whatsapp.ariaLabel')}
-        >
-          <Phone className="size-6" />
-        </a>
-      </div>
+export default function App() {
+  const lotesDisponibles = lotes.filter(l => l.estado === 'disponible').length;
+  return (
+    <>
+      <SEOHead />
+      <StructuredData lotesDisponibles={lotesDisponibles} precioMinimoUSD={5000} />
+      <Analytics gscVerification={import.meta.env.VITE_GSC_VERIFICATION} />
+      <Routes>
+        <Route path="/" element={<Layout><HomeContent /></Layout>} />
+        <Route path="/calculadora" element={<Layout><CalculadoraUVA /></Layout>} />
+      </Routes>
     </>
   );
 }
