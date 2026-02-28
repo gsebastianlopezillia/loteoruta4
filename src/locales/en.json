@@ -1,6 +1,6 @@
 {
   "nav": {
-    "brand": "Mission Reborn",
+    "brand": "Loteo Ruta 4",
     "garantias": "Guarantees",
     "ubicacion": "Location",
     "lotes": "Lots",
@@ -13,17 +13,23 @@
     "language": "Language"
   },
   "whatsapp": {
-    "defaultMessage": "Hi, I'd like information about Mission Reborn",
+    "defaultMessage": "Hi, I'd like information about Loteo Ruta 4",
     "ariaLabel": "Contact via WhatsApp"
   },
   "banner": {
-    "summerOffer": "🌞 SUMMER OFFER: with the lot we include a 159 gal triple-layer tank 🌞"
+    "summerOffer": "🌞 SUMMER OFFER: with the lot we deliver a 600-litre triple-layer tank 🌞"
+  },
+  "countdown": {
+    "days": "Days",
+    "hours": "Hours",
+    "minutes": "Min",
+    "seconds": "Sec"
   },
   "hero": {
-    "title": "Mission Reborn: Your 10,764 sq ft plot in Misiones",
+    "title": "Loteo Ruta 4: Your 10,764 sq ft plot in Misiones",
     "subtitle": "with Title, Paved Road, Water",
     "cta": "RESERVE MY LOT",
-    "lotsLeft": "Only {{count}} lots left"
+    "lotsLeft": "Last {{count}} lots! Selling fast — reserve now"
   },
   "garantias": {
     "headline": "Tired of watching your money vanish on rent or inflation in the city?",
@@ -41,7 +47,7 @@
     "title": "Privileged",
     "titleHighlight": "Location",
     "subtitle": "Provincial Route 4, Almafuerte, Misiones – The perfect balance between nature and connectivity",
-    "mapTitle": "Mission Reborn location",
+    "mapTitle": "Loteo Ruta 4 location",
     "card1Title": "Direct frontage on paved Route 4",
     "card1Desc": "Easy access year-round and strong future appreciation",
     "card2Title": "492 ft from school and bus stop",
@@ -60,7 +66,9 @@
   "loteCard": {
     "lote": "Lot",
     "sold": "SOLD",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "reservar": "Reserve this lot",
+    "whatsappMessage": "Hi, I'm interested in Lot {{numero}} (USD {{precio}})."
   },
   "common": {
     "surfaceValue": "10,764 sq ft",
@@ -70,9 +78,9 @@
   },
   "benefits": {
     "title": "Why",
-    "titleHighlight": "Mission Reborn?",
+    "titleHighlight": "Loteo Ruta 4?",
     "subtitle": "Everything you need for your life project or investment",
-    "1title": "Recovered Native Forest",
+    "1title": "Native Forest in Recovery",
     "1desc": "Natural shade, cool air and a living ecosystem to enjoy year-round",
     "2title": "Premium Soil",
     "2desc": "Sandy gravel that drains; on a slope, so no flooding",
@@ -95,12 +103,12 @@
     "goToImage": "Go to image {{index}}",
     "images": {
       "0title": "General view of the development",
-      "0desc": "Full perspective of Mission Reborn and its privileged location",
+      "0desc": "Full perspective of Loteo Ruta 4 and its privileged location",
       "1title": "Aerial view of the development",
       "1desc": "Paved Route 4 and nature in perfect harmony from above",
       "2title": "Internal roads",
       "2desc": "Maintained access between lots for easy circulation",
-      "3title": "Recovered native forest",
+      "3title": "Native forest in recovery",
       "3desc": "Native vegetation and wildflowers in full recovery",
       "4title": "Main access",
       "4desc": "Main entrance to the development integrated with the natural landscape",
@@ -121,7 +129,8 @@
     }
   },
   "video": {
-    "title": "Virtual tour of the development"
+    "title": "Virtual tour of the development",
+    "cta": "Convinced? Contact via WhatsApp"
   },
   "testimonials": {
     "title": "What those who",
@@ -130,15 +139,15 @@
     "next": "Next testimonial",
     "goTo": "Go to testimonial {{index}}",
     "1text": "The lot is in a strategic and accessible place, easy access to the paved road by car. Connected to the city and other points of interest. Ideal for a home, farm and outdoor projects.",
-    "1subtitle": "School principal - La Plata",
+    "1subtitle": "M.G., School principal - La Plata",
     "2text": "A very simple process, a pleasure doing business with them.",
-    "2subtitle": "Investor - Buenos Aires",
+    "2subtitle": "C.R., Investor - Buenos Aires",
     "3text": "I'm very happy with the land, I have several fruit trees and good shade from the pines for my little cabin.",
-    "3subtitle": "Truck driver - San Luis",
+    "3subtitle": "J.M., Truck driver - San Luis",
     "4text": "The high part of the lot offers a unique view over Almafuerte's green area.",
-    "4subtitle": "Private - Posadas",
+    "4subtitle": "L.P., Private - Posadas",
     "5text": "I can rate my experience as a lot buyer as excellent! Grateful for the attention and willingness of the owners. Spacious plots, great location, with many possibilities!",
-    "5subtitle": "Private - Los Helechos"
+    "5subtitle": "R.H., Private - Los Helechos"
   },
   "cta": {
     "title": "Ready for a",
@@ -176,29 +185,40 @@
     "a4li5": "Purchase deed fees",
     "q5": "What payment methods do you accept?",
     "a5p1": "Cash in any currency: Argentine pesos, dollars, guaraníes, reais, USDT, Bitcoin, etc.",
-    "a5p2": "No financing at the moment.",
+    "a5p2": "UVA financing (Unit of Purchasing Power) up to 24 installments.",
     "q6": "Is the area quiet and safe?",
     "a6": "Very quiet and safe. It's a very family-oriented rural area, several houses around, school across the street, permanent neighbours."
   },
+  "emailForm": {
+    "title": "No WhatsApp?",
+    "subtitle": "Leave your email and we'll contact you",
+    "placeholder": "you@email.com",
+    "submit": "Send"
+  },
+  "trustBadges": {
+    "titulo": "Title ready",
+    "escritura": "Direct transfer",
+    "servicios": "Services at gate"
+  },
   "footer": {
-    "brand": "Mission Reborn",
+    "brand": "Loteo Ruta 4",
     "description": "Your escape to Misiones. Premium plots with clear title on Provincial Route 4, Almafuerte.",
     "contactTitle": "Contact",
     "address": "Provincial Route 4, Almafuerte, Misiones",
     "summerTitle": "Summer offer",
-    "summerText": "☀️With the lot we include a 159 gal triple-layer tank",
-    "copyright": "© 2026 Mission Reborn - loteoruta4.com - All rights reserved",
+    "summerText": "☀️With the lot we deliver a 600-litre triple-layer tank",
+    "copyright": "© 2026 Loteo Ruta 4 - loteoruta4.com - All rights reserved",
     "tagline": "Don't let the lots get away!"
   },
   "seo": {
-    "title": "Mission Reborn - 10,764 sq ft plots in Misiones from $5,000 USD",
-    "description": "10,764 sq ft plots in Misiones from $5,000 USD. Mission Reborn with title, paved road, water and nature. Only a few lots left.",
-    "siteName": "Mission Reborn"
+    "title": "Loteo Ruta 4 - 10,764 sq ft plots in Misiones from $5,000 USD",
+    "description": "10,764 sq ft plots in Misiones from $5,000 USD. Loteo Ruta 4 with title, paved road, water and nature. Only a few lots left.",
+    "siteName": "Loteo Ruta 4"
   },
   "structuredData": {
-    "organizationDescription": "Mission Reborn - 10,764 sq ft plots in Misiones with title, paved road and water",
+    "organizationDescription": "Loteo Ruta 4 - 10,764 sq ft plots in Misiones with title, paved road and water",
     "localBusinessDescription": "Sale of 10,764 sq ft plots in Misiones. Lots with individual title, access via paved Route 4, water and services.",
-    "productName": "10,764 sq ft plot - Mission Reborn",
+    "productName": "10,764 sq ft plot - Loteo Ruta 4",
     "productDescription": "10,764 sq ft plot in Misiones with individual title, access via paved Route 4, water and services. Ideal for building or investment.",
     "breadcrumbHome": "Home",
     "breadcrumbLotes": "Lots",
@@ -214,7 +234,7 @@
     "faq4q": "What is the purchase process?",
     "faq4a": "1. Reserve with 20% deposit. 2. The notary requests all certificates. 3. Transfer after certificates (usually 15-20 days). We work with Lombardi notary in Posadas.",
     "faq5q": "What payment methods do you accept?",
-    "faq5a": "Cash in any currency: pesos, dollars, guaraníes, reais, USDT, Bitcoin, etc. No financing at the moment.",
+    "faq5a": "Cash in any currency: pesos, dollars, guaraníes, reais, USDT, Bitcoin, etc. UVA financing up to 24 installments.",
     "faq6q": "Is the area quiet and safe?",
     "faq6a": "Very quiet and safe. It's a very family-oriented rural area, several houses around, school across the street, permanent neighbours.",
     "propertySurface": "Surface area",
@@ -237,9 +257,11 @@
     "lotePrice": "Lot price (USD)",
     "valorUVA": "UVA value",
     "dolarMEP": "MEP dollar (BCRA, reference to convert USD to ARS)",
-    "plazo": "Installments (6 to 24)",
-    "plazoEditable": "You can only change this value",
-    "tasaMensual": "Monthly rate (by term)",
+    "plazo": "Number of installments",
+    "plazoEditable": "Choose 6, 12, 18 or 24 installments",
+    "cuotas": "installments",
+    "tasaMensual": "Monthly rate",
+    "tasaAnual": "annual",
     "calcular": "Calculate installment and amortization",
     "resultados": "Results",
     "montoPesos": "Amount in pesos",
@@ -255,9 +277,15 @@
     "saldoUVAs": "UVA balance",
     "saldoPesos": "Balance $",
     "nota": "BCRA French system: amount expressed in __UVA_LINK__. Fixed UVA installment. Interest = UVA balance × i. Principal = Installment − Interest.",
+    "tablaDisclaimer": "The installment in UVAs is fixed. The peso amount of each installment is subject to the UVA value in the month of payment. The peso amounts shown are estimates based on the UVA as of the simulation date.",
+    "queEsUVA": "The UVA (Unit of Purchasing Power) is an index that reflects inflation and is updated daily. __UVA_BCRA_LINK__.",
+    "uvaLinkText": "See BCRA explanation",
     "apiStatusOk": "UVA and BCRA rate loaded.",
     "apiStatusError": "Could not load UVA/dollar from BCRA. Use manual values.",
     "completarDatos": "Enter UVA, MEP (or lot price) and term.",
-    "simularCuotas": "Simulate installments"
+    "simularCuotas": "Simulate installments",
+    "whatsappCta": "Contact via WhatsApp",
+    "whatsappCtaMessage": "Hi, I simulated Lot {{numero}} in UVA installments. I want to reserve.",
+    "whatsappCtaMessageNoLote": "Hi, I simulated UVA financing. I want to reserve a lot."
   }
 }

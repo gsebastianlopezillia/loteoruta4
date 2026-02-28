@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import { Phone } from 'lucide-react';
 import { useCurrencyConversion } from '../hooks/useCurrencyConversion';
 import { Button } from './ui/button';
+import { trackWhatsAppClick } from './Analytics';
 
 interface LoteCardProps {
   numero: number;
@@ -243,15 +245,32 @@ export function LoteCard({ numero, superficie, precioUSD, dimensiones, forma, es
             {dimensiones}
           </p>
           {isDisponible && precioUSD > 0 && (
-            <Link to={`/calculadora?lote=${numero}&precio=${precioUSD}`} className="mt-4 inline-block">
-              <Button
-                variant="outline"
-                className="border-[#27AE60] text-[#27AE60] hover:bg-[#27AE60] hover:text-white"
-                style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 600, fontSize: '14px' }}
+            <div className="mt-4 flex flex-wrap gap-3">
+              <a
+                href={`https://wa.me/543764165357?text=${encodeURIComponent(t('loteCard.whatsappMessage', { numero, precio: precioUSD.toLocaleString() }))}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackWhatsAppClick('lote_card')}
+                className="inline-block"
               >
-                {t('calculator.simularCuotas')}
-              </Button>
-            </Link>
+                <Button
+                  className="bg-[#27AE60] hover:bg-[#1e8449] text-white"
+                  style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 600, fontSize: '14px' }}
+                >
+                  <Phone className="mr-2 size-4" />
+                  {t('loteCard.reservar')}
+                </Button>
+              </a>
+              <Link to={`/calculadora?lote=${numero}&precio=${precioUSD}`} className="inline-block">
+                <Button
+                  variant="outline"
+                  className="border-[#27AE60] text-[#27AE60] hover:bg-[#27AE60] hover:text-white"
+                  style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 600, fontSize: '14px' }}
+                >
+                  {t('calculator.simularCuotas')}
+                </Button>
+              </Link>
+            </div>
           )}
         </div>
 

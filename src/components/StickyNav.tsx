@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
-import { Phone, ChevronDown } from 'lucide-react';
+import { Phone, ChevronDown, Menu } from 'lucide-react';
+import { trackWhatsAppClick } from './Analytics';
+import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
 import 'react-flagpack/dist/style.css';
 
 const flagsBase = `${import.meta.env.BASE_URL}flags`;
@@ -26,6 +28,7 @@ export function StickyNav() {
   const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const langMenuRef = useRef<HTMLDivElement>(null);
   const isHome = location.pathname === '/';
 
@@ -46,6 +49,7 @@ export function StickyNav() {
   }, []);
 
   const scrollToSection = (id: string) => {
+    setMobileOpen(false);
     if (!isHome) return;
     const element = document.getElementById(id);
     if (element) {
@@ -68,6 +72,7 @@ export function StickyNav() {
   ];
 
   const handleWhatsApp = () => {
+    trackWhatsAppClick('nav');
     const message = encodeURIComponent(t('whatsapp.defaultMessage'));
     window.open(`https://wa.me/543764165357?text=${message}`, '_blank');
   };
@@ -114,6 +119,51 @@ export function StickyNav() {
               )
             ))}
           </div>
+          <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+            <SheetTrigger asChild>
+              <button
+                type="button"
+                className="lg:hidden flex items-center justify-center p-2 rounded-lg text-[#D0D0D0] hover:text-[#27AE60] hover:bg-[#27AE60]/10 transition-colors"
+                aria-label="Menu"
+              >
+                <Menu className="size-6" />
+              </button>
+            </SheetTrigger>
+            <SheetContent side="right" className="bg-[#121212] border-[#2a2a2a] w-[280px]">
+              <div className="flex flex-col gap-2 pt-8">
+                {navItems.map((item) => (
+                  isHome ? (
+                    <button
+                      key={item.id}
+                      onClick={() => scrollToSection(item.id)}
+                      className="px-4 py-3 text-left text-[16px] text-[#D0D0D0] hover:text-[#27AE60] hover:bg-[#27AE60]/10 rounded-lg transition-colors"
+                      style={{ fontFamily: 'Open Sans, sans-serif' }}
+                    >
+                      {t(item.labelKey)}
+                    </button>
+                  ) : (
+                    <Link
+                      key={item.id}
+                      to={`/#${item.id}`}
+                      onClick={() => setMobileOpen(false)}
+                      className="px-4 py-3 text-left text-[16px] text-[#D0D0D0] hover:text-[#27AE60] hover:bg-[#27AE60]/10 rounded-lg transition-colors"
+                      style={{ fontFamily: 'Open Sans, sans-serif' }}
+                    >
+                      {t(item.labelKey)}
+                    </Link>
+                  )
+                ))}
+                <button
+                  onClick={() => { setMobileOpen(false); handleWhatsApp(); }}
+                  className="mt-4 mx-4 flex items-center justify-center gap-2 bg-[#27AE60] hover:bg-[#1e8449] text-white px-6 py-3 rounded-full transition-colors"
+                  style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 600, fontSize: '16px' }}
+                >
+                  <Phone className="size-5" />
+                  {t('nav.contactar')}
+                </button>
+              </div>
+            </SheetContent>
+          </Sheet>
           <div className="flex items-center gap-3">
             <div className="relative" ref={langMenuRef}>
               <button

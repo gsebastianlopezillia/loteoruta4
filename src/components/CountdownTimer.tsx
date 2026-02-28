@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface TimeLeft {
   days: number;
@@ -7,11 +8,16 @@ interface TimeLeft {
   seconds: number;
 }
 
-export function CountdownTimer() {
+interface CountdownTimerProps {
+  targetDate?: string;
+}
+
+export function CountdownTimer({ targetDate = '2026-03-31T23:59:59' }: CountdownTimerProps) {
+  const { t } = useTranslation();
   const calculateTimeLeft = (): TimeLeft => {
-    const targetDate = new Date('2025-12-31T23:59:59').getTime();
+    const target = new Date(targetDate).getTime();
     const now = new Date().getTime();
-    const difference = targetDate - now;
+    const difference = target - now;
 
     if (difference > 0) {
       return {
@@ -35,15 +41,18 @@ export function CountdownTimer() {
     return () => clearInterval(timer);
   }, []);
 
+  const isExpired = timeLeft.days === 0 && timeLeft.hours === 0 && timeLeft.minutes === 0 && timeLeft.seconds === 0;
+  if (isExpired) return null;
+
   return (
-    <div className="flex gap-4 justify-center items-center">
-      <TimeUnit value={timeLeft.days} label="Días" />
-      <div className="text-[#004D40]">:</div>
-      <TimeUnit value={timeLeft.hours} label="Horas" />
-      <div className="text-[#004D40]">:</div>
-      <TimeUnit value={timeLeft.minutes} label="Min" />
-      <div className="text-[#004D40]">:</div>
-      <TimeUnit value={timeLeft.seconds} label="Seg" />
+    <div className="flex gap-2 md:gap-4 justify-center items-center flex-wrap">
+      <TimeUnit value={timeLeft.days} label={t('countdown.days')} />
+      <div className="text-white font-bold">:</div>
+      <TimeUnit value={timeLeft.hours} label={t('countdown.hours')} />
+      <div className="text-white font-bold">:</div>
+      <TimeUnit value={timeLeft.minutes} label={t('countdown.minutes')} />
+      <div className="text-white font-bold">:</div>
+      <TimeUnit value={timeLeft.seconds} label={t('countdown.seconds')} />
     </div>
   );
 }

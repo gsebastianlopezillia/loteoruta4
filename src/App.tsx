@@ -6,7 +6,7 @@ import { BenefitCard } from './components/BenefitCard';
 import { Layout } from './components/Layout';
 import { SEOHead } from './components/SEOHead';
 import { StructuredData } from './components/StructuredData';
-import { Analytics } from './components/Analytics';
+import { Analytics, trackWhatsAppClick } from './components/Analytics';
 import { FAQItem } from './components/FAQItem';
 import { Button } from './components/ui/button';
 import {
@@ -98,7 +98,8 @@ function HomeContent() {
     setIsVisible(true);
   }, []);
 
-  const handleWhatsAppMain = () => {
+  const handleWhatsAppMain = (location: string) => {
+    trackWhatsAppClick(location);
     const message = encodeURIComponent(t('whatsapp.defaultMessage'));
     window.open(`https://wa.me/543764165357?text=${message}`, '_blank');
   };
@@ -131,20 +132,20 @@ function HomeContent() {
               <h1 className="text-[72px] md:text-[100px] leading-[1.2] text-[#FFFFFF] mb-6 max-w-5xl mx-auto" style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 700, letterSpacing: '0.5px', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
                 {t('hero.title')}
               </h1>
-              <p className="text-[20px] text-[#FFFFFF] mb-8 max-w-3xl mx-auto" style={{ fontFamily: 'Open Sans, sans-serif', lineHeight: '1.6' }}>
+              <p className="text-[20px] text-[#FFFFFF] mb-6 max-w-3xl mx-auto" style={{ fontFamily: 'Open Sans, sans-serif', lineHeight: '1.6' }}>
                 {t('hero.subtitle')}
               </p>
+              <p className="text-[22px] md:text-[26px] text-[#FFFFFF] mb-8 font-bold max-w-2xl mx-auto px-6 py-4 rounded-xl bg-[#27AE60]/25 border-2 border-[#27AE60]" style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 700, letterSpacing: '0.4px', textShadow: '0 2px 8px rgba(0,0,0,0.4)' }}>
+                {t('hero.lotsLeft', { count: lotesDisponibles })}
+              </p>
               <Button
-                onClick={handleWhatsAppMain}
+                onClick={() => handleWhatsAppMain('hero')}
                 className="bg-[#27AE60] hover:bg-[#1e8449] text-white px-16 py-8 transition-all duration-300 hover:scale-[1.08] shadow-2xl shadow-[#27AE60]/50"
                 style={{ borderRadius: '8px', fontSize: '20px', fontFamily: 'Montserrat, sans-serif', fontWeight: 600, letterSpacing: '0.5px' }}
               >
                 <Phone className="mr-2 size-5" />
                 {t('hero.cta')}
               </Button>
-              <p className="mt-8 text-[16px] text-[#A0A0A0]" style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 300, lineHeight: '1.5' }}>
-                {t('hero.lotsLeft', { count: lotesDisponibles })}
-              </p>
             </div>
 
             <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
@@ -207,7 +208,7 @@ function HomeContent() {
               <div className="grid md:grid-cols-2 gap-8 items-start">
                 <div className="animate-on-scroll bg-[#121212] rounded-xl overflow-hidden border border-[#2a2a2a] h-[450px] shadow-xl">
                   <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3538.2!2d-55.448548!3d-27.523444!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjfCsDMxJzI0LjQiUyA1NcKwMjYnNTQuNSJX!5e0!3m2!1ses!2sar!4v1234567890"
+                    src="https://maps.google.com/maps?q=-27.523444,-55.448548&z=15&output=embed"
                     width="100%"
                     height="100%"
                     style={{ border: 0 }}
@@ -490,6 +491,16 @@ function HomeContent() {
                     allowFullScreen
                   />
                 </div>
+                <div className="mt-6 text-center">
+                  <Button
+                    onClick={() => handleWhatsAppMain('video')}
+                    className="bg-[#27AE60] hover:bg-[#1e8449] text-white px-10 py-6 transition-all duration-300 hover:scale-105"
+                    style={{ borderRadius: '8px', fontSize: '18px', fontFamily: 'Montserrat, sans-serif', fontWeight: 600 }}
+                  >
+                    <Phone className="mr-2 size-5 inline" />
+                    {t('video.cta')}
+                  </Button>
+                </div>
               </div>
             </div>
           </section>
@@ -555,7 +566,7 @@ function HomeContent() {
                 {t('cta.title')} <span className="text-[#27AE60]">{t('cta.titleHighlight')}</span>
               </h2>
               <Button
-                onClick={handleWhatsAppMain}
+                onClick={() => handleWhatsAppMain('cta_final')}
                 className="animate-on-scroll bg-[#27AE60] hover:bg-[#1e8449] text-white px-16 py-8 transition-all duration-300 hover:scale-[1.08] shadow-2xl shadow-[#27AE60]/40"
                 style={{ borderRadius: '60px', fontSize: '20px', fontFamily: 'Montserrat, sans-serif', fontWeight: 600, letterSpacing: '0.5px' }}
               >
@@ -613,10 +624,6 @@ function HomeContent() {
                       <p className="mt-4"><strong>{t('faq.a4expenses')}</strong></p>
                       <ul className="space-y-1 ml-4">
                         <li>• {t('faq.a4li1')}</li>
-                        <li>• {t('faq.a4li2')}</li>
-                        <li>• {t('faq.a4li3')}</li>
-                        <li>• {t('faq.a4li4')}</li>
-                        <li>• {t('faq.a4li5')}</li>
                       </ul>
                     </div>
                   </FAQItem>
@@ -638,7 +645,7 @@ function HomeContent() {
                   {t('faq.moreQuestions')}
                 </p>
                 <Button
-                  onClick={handleWhatsAppMain}
+                  onClick={() => handleWhatsAppMain('faq')}
                   className="animate-on-scroll bg-transparent border-2 border-[#27AE60] text-[#27AE60] hover:bg-[#27AE60] hover:text-white px-12 py-6 transition-all duration-300 hover:scale-105"
                   style={{ borderRadius: '8px', fontSize: '18px', fontFamily: 'Montserrat, sans-serif', fontWeight: 600, letterSpacing: '0.5px' }}
                 >

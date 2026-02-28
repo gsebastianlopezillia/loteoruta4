@@ -4,10 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
-import { ChevronLeft } from 'lucide-react';
+import { ChevronLeft, Phone } from 'lucide-react';
+import { trackWhatsAppClick } from '../components/Analytics';
 
 const CORS_PROXY = 'https://corsproxy.io/?';
-const UVA_BCRA_URL = 'https://www.bcra.gob.ar/PublicacionesEstadisticas/Principales_variables_datos.asp?serie=7913&detalle=Unidad+de+Valor+Adquisitivo+(UVA)';
+const UVA_BCRA_URL = 'https://www.bcra.gob.ar/principales-variables-datos/?serie=7913&detalle=Unidad%20de%20Valor%20Adquisitivo%20%28UVA%29&detalle_sub=%28en%20pesos%20-con%20dos%20decimales-%2C%20base%2031.3.2016%3D14.05%29';
 const uvaLinkHtml = `<a href="${UVA_BCRA_URL}" target="_blank" rel="noopener noreferrer" class="text-[#27AE60] hover:underline">UVAs</a>`;
 function fetchBCRA(url: string) {
   return fetch(CORS_PROXY + encodeURIComponent(url)).then((r) => r.json());
@@ -17,11 +18,11 @@ function hoyISO() {
   return new Date().toISOString().slice(0, 10);
 }
 
+const CUOTAS_DISPONIBLES = [6, 12, 18, 24] as const;
+
 function tasaMensualPorPlazo(plazoMeses: number): number {
-  if (plazoMeses <= 6) return 0.1;
-  if (plazoMeses >= 24) return 0.13;
-  const t = (plazoMeses - 6) / (24 - 6);
-  return 0.1 + (0.13 - 0.1) * Math.sqrt(t);
+  const tasaAnual = plazoMeses <= 12 ? 0.1 : 0.15;
+  return Math.pow(1 + tasaAnual, 1 / 12) - 1;
 }
 
 export function CalculadoraUVA() {
@@ -35,34 +36,23 @@ export function CalculadoraUVA() {
   const [valorUVA, setValorUVA] = useState('1774.96');
   const [uvaRequestDate, setUvaRequestDate] = useState<Date | null>(null);
   const [dolarMEP, setDolarMEP] = useState('');
-  const [plazo, setPlazo] = useState(12);
+  const [plazo, setPlazo] = useState<number>(12);
   const [apiStatus, setApiStatus] = useState('');
   const [showResult, setShowResult] = useState(false);
   const [resumen, setResumen] = useState('');
   const [tablaRows, setTablaRows] = useState<Array<{ cuotaNum: number; cuotaUVAs: number; cuotaPesos: number; interesPesos: number; amortPesos: number; saldoUVAs: number; saldoPesos: number }>>([]);
-  const plazoInputRef = useRef<HTMLInputElement>(null);
   const resultadosRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const el = plazoInputRef.current;
-    if (!el) return;
-    const handleWheel = (e: WheelEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-      const delta = e.deltaY > 0 ? -1 : 1;
-      setPlazo((prev) => Math.max(6, Math.min(24, prev + delta)));
-    };
-    el.addEventListener('wheel', handleWheel, { passive: false });
-    return () => el.removeEventListener('wheel', handleWheel);
-  }, []);
 
   const cargarDatosBCRA = useCallback(async () => {
     const requestDate = new Date();
+    console.log('[BCRA] Iniciando llamada a API BCRA...');
     try {
       const [cotResp, monResp] = await Promise.all([
         fetchBCRA('https://api.bcra.gob.ar/estadisticascambiarias/v1.0/Cotizaciones'),
-        fetchBCRA('https://api.bcra.gob.ar/estadisticas/v3.0/monetarias'),
+        fetchBCRA('https://api.bcra.gob.ar/estadisticas/v4.0/Monetarias'),
       ]);
+      console.log('[BCRA] Cotizaciones (raw):', cotResp);
+      console.log('[BCRA] Monetarias v4 (raw):', monResp);
       if (cotResp.status === 200 && cotResp.results?.detalle) {
         const usd = cotResp.results.detalle.find((x: { codigoMoneda?: string }) => (x.codigoMoneda || '').toUpperCase() === 'USD');
         const mep = cotResp.results.detalle.find((x: { descripcion?: string }) => (x.descripcion || '').toUpperCase().indexOf('MEP') >= 0);
@@ -70,24 +60,41 @@ export function CalculadoraUVA() {
         if (cot != null) setDolarMEP(String(cot));
       }
       if (monResp.status === 200 && Array.isArray(monResp.results)) {
-        const uvaVar = monResp.results.find((x: { descripcion?: string }) => (x.descripcion || '').toUpperCase().indexOf('UVA') >= 0 && (x.descripcion || '').toUpperCase().indexOf('UVI') < 0);
-        if (uvaVar && typeof uvaVar.valor === 'number') {
-          setValorUVA(String(uvaVar.valor));
+        const uvaVar = monResp.results.find((x: { idVariable?: number; descripcion?: string; tipoSerie?: string }) =>
+          x.idVariable === 31 || ((x.descripcion || '').toUpperCase().includes('UNIT OF PURCHASING POWER') && (x.tipoSerie || '').toUpperCase().includes('UNIT OF ACCOUNT'))
+        );
+        console.log('[BCRA] UVA variable encontrada:', uvaVar);
+        const valorDirecto = uvaVar?.ultValorInformado ?? uvaVar?.valor;
+        if (uvaVar && typeof valorDirecto === 'number') {
+          console.log('[BCRA] UVA desde monetarias (valor directo):', valorDirecto);
+          setValorUVA(String(valorDirecto));
           setUvaRequestDate(requestDate);
         } else if (uvaVar?.idVariable) {
-          const hasta = uvaVar.fecha || hoyISO();
-          const uvaResp = await fetchBCRA(`https://api.bcra.gob.ar/estadisticas/v3.0/monetarias/${uvaVar.idVariable}?desde=${hasta}&hasta=${hasta}&limit=1`);
+          const hasta = uvaVar.ultFechaInformada || hoyISO();
+          const uvaUrl = `https://api.bcra.gob.ar/estadisticas/v4.0/Monetarias/${uvaVar.idVariable}?Desde=${hasta}&Hasta=${hasta}&Limit=1`;
+          console.log('[BCRA] Fetch UVA por idVariable:', uvaUrl);
+          const uvaResp = await fetchBCRA(uvaUrl);
+          console.log('[BCRA] UVA por idVariable (raw):', uvaResp);
           if (uvaResp.status === 200 && uvaResp.results?.length) {
-            const v = uvaResp.results[uvaResp.results.length - 1];
-            if (typeof v.valor === 'number') {
-              setValorUVA(String(v.valor));
+            const datos = uvaResp.results[0];
+            const detalle = datos?.detalle;
+            const ultimo = Array.isArray(detalle) ? detalle[detalle.length - 1] : null;
+            const valor = ultimo?.valor ?? datos?.valor;
+            if (typeof valor === 'number') {
+              console.log('[BCRA] UVA desde endpoint idVariable:', valor);
+              setValorUVA(String(valor));
               setUvaRequestDate(requestDate);
             }
           }
+        } else {
+          console.log('[BCRA] No se encontró UVA en monetarias o estructura inesperada. monResp.results:', monResp.results);
         }
+      } else {
+        console.log('[BCRA] monetarias: status !== 200 o results no es array. status:', monResp?.status, 'results:', monResp?.results);
       }
       setApiStatus(t('calculator.apiStatusOk'));
-    } catch {
+    } catch (err) {
+      console.error('[BCRA] Error en llamada API:', err);
       setApiStatus(t('calculator.apiStatusError'));
     }
   }, [t]);
@@ -96,11 +103,11 @@ export function CalculadoraUVA() {
     cargarDatosBCRA();
   }, [cargarDatosBCRA]);
 
-  const plazoNum = Math.max(6, Math.min(24, isNaN(plazo) ? 12 : plazo));
+  const plazoNum = CUOTAS_DISPONIBLES.includes(plazo as (typeof CUOTAS_DISPONIBLES)[number]) ? plazo : 12;
   const tasaMensual = tasaMensualPorPlazo(plazoNum);
-  const tasaDisplay = (tasaMensual * 100).toFixed(2) + '%';
-  const uvaDateLabel = uvaRequestDate
-    ? uvaRequestDate.toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '/')
+  const tasaAnualPorPlazo = plazoNum <= 12 ? 10 : 15;
+  const uvaDateLabel = (uvaRequestDate ?? (valorUVA ? new Date() : null))
+    ? (uvaRequestDate ?? new Date()).toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric' })
     : '--/--/----';
 
   const calcularFinanciacion = () => {
@@ -124,7 +131,7 @@ export function CalculadoraUVA() {
       `<strong>${t('calculator.uvasTotales').replace('__UVA_LINK__', uvaLinkHtml)}:</strong> ${uvasTotales.toFixed(2)}<br>` +
       `<strong>${t('calculator.cuotaUVAs')}:</strong> ${cuotaUVAs.toFixed(4)} UVAs/mes<br>` +
       `<strong>${t('calculator.cuotaPesos')} (UVA ${uva.toFixed(2)}):</strong> $${cuotaInicialPesos.toLocaleString('es-AR', { minimumFractionDigits: 2 })}<br>` +
-      `<strong>Tasa mensual:</strong> ${(tasaMensual * 100).toFixed(2)}% | ${t('calculator.plazoMeses')}: ${plazoNum} meses`
+      `<strong>${t('calculator.tasaMensual')}:</strong> ${(tasaMensual * 100).toFixed(2)}% (${tasaAnualPorPlazo}% ${t('calculator.tasaAnual')}) | ${t('calculator.plazoMeses')}: ${plazoNum} meses`
     );
     let saldoUVAs = uvasTotales;
     const rows: Array<{ cuotaNum: number; cuotaUVAs: number; cuotaPesos: number; interesPesos: number; amortPesos: number; saldoUVAs: number; saldoPesos: number }> = [];
@@ -148,6 +155,14 @@ export function CalculadoraUVA() {
       resultadosRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }, [showResult]);
+
+  const handleWhatsApp = () => {
+    trackWhatsAppClick('calculadora');
+    const message = numeroLote != null
+      ? t('calculator.whatsappCtaMessage', { numero: numeroLote })
+      : t('calculator.whatsappCtaMessageNoLote');
+    window.open(`https://wa.me/543764165357?text=${encodeURIComponent(message)}`, '_blank');
+  };
 
   return (
     <section className="py-16 bg-[#0a0a0a]">
@@ -218,27 +233,19 @@ export function CalculadoraUVA() {
               <p className="text-xs text-[#666] mt-0.5 mb-1" style={{ fontFamily: 'Open Sans, sans-serif' }}>
                 {t('calculator.plazoEditable')}
               </p>
-              <Input
-                ref={plazoInputRef}
+              <select
                 id="plazo"
-                type="number"
-                min={6}
-                max={24}
                 value={plazo}
-                onChange={(e) => setPlazo(Math.max(6, Math.min(24, parseInt(e.target.value, 10) || 6)))}
-                className="mt-1 bg-[#1a1a1a] border-2 border-[#27AE60]/50 focus:border-[#27AE60] focus:ring-2 focus:ring-[#27AE60]/30 text-[#FFFFFF] cursor-text"
-              />
-            </div>
-            <div>
-              <Label htmlFor="tasaDisplay" className="text-[#888] text-sm" style={{ fontFamily: 'Open Sans, sans-serif' }}>
-                {t('calculator.tasaMensual')}
-              </Label>
-              <Input
-                id="tasaDisplay"
-                readOnly
-                value={tasaDisplay}
-                className="mt-1 bg-[#0d0d0d] border-[#1f1f1f] text-[#888] cursor-default opacity-90"
-              />
+                onChange={(e) => setPlazo(Number(e.target.value))}
+                className="mt-1 w-full bg-[#1a1a1a] border-2 border-[#27AE60]/50 focus:border-[#27AE60] focus:ring-2 focus:ring-[#27AE60]/30 text-[#FFFFFF] cursor-pointer rounded-md px-3 py-2"
+                style={{ fontFamily: 'Montserrat, sans-serif' }}
+              >
+                {CUOTAS_DISPONIBLES.map((n) => (
+                  <option key={n} value={n} className="bg-[#1a1a1a] text-[#FFFFFF]">
+                    {n} {t('calculator.cuotas')}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
           <Button
@@ -288,11 +295,27 @@ export function CalculadoraUVA() {
                 </tbody>
               </table>
             </div>
+            <p className="mt-4 text-xs text-[#888] italic" style={{ fontFamily: 'Open Sans, sans-serif' }}>
+              {t('calculator.tablaDisclaimer')}
+            </p>
             <p
               className="mt-6 text-sm text-[#888] [&_a]:text-[#27AE60] [&_a]:hover:underline"
               style={{ fontFamily: 'Open Sans, sans-serif' }}
               dangerouslySetInnerHTML={{ __html: t('calculator.nota').replace('__UVA_LINK__', uvaLinkHtml) }}
             />
+            <p
+              className="mt-4 text-sm text-[#888] [&_a]:text-[#27AE60] [&_a]:hover:underline"
+              style={{ fontFamily: 'Open Sans, sans-serif' }}
+              dangerouslySetInnerHTML={{ __html: t('calculator.queEsUVA').replace('__UVA_BCRA_LINK__', `<a href="${UVA_BCRA_URL}" target="_blank" rel="noopener noreferrer" class="text-[#27AE60] hover:underline">${t('calculator.uvaLinkText')}</a>`) }}
+            />
+            <Button
+              onClick={handleWhatsApp}
+              className="mt-8 w-full bg-[#27AE60] hover:bg-[#1e8449] text-white px-8 py-6"
+              style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 600, fontSize: '18px' }}
+            >
+              <Phone className="mr-2 size-5" />
+              {t('calculator.whatsappCta')}
+            </Button>
           </div>
         )}
       </div>
