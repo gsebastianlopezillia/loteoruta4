@@ -1,11 +1,23 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 
 interface AnalyticsProps {
   gscVerification?: string;
 }
 
+const GA_ID = 'G-6JZW63PDGC';
+
+function sendEvent(name: string, params?: Record<string, string | number | boolean | undefined>) {
+  if (typeof window === 'undefined' || !window.gtag) return;
+  const clean = params ? Object.fromEntries(
+    Object.entries(params).filter(([, v]) => v !== undefined && v !== null)
+  ) as Record<string, string | number | boolean> : undefined;
+  window.gtag('event', name, clean);
+}
+
 export function Analytics({ gscVerification }: AnalyticsProps) {
+  const location = useLocation();
   useEffect(() => {
     // Facebook Pixel
     if (typeof window !== 'undefined') {
@@ -32,7 +44,7 @@ export function Analytics({ gscVerification }: AnalyticsProps) {
       // GA4 script
       const script1 = document.createElement('script');
       script1.async = true;
-      script1.src = 'https://www.googletagmanager.com/gtag/js?id=G-6JZW63PDGC';
+      script1.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
       document.head.appendChild(script1);
 
       const script2 = document.createElement('script');
@@ -40,25 +52,19 @@ export function Analytics({ gscVerification }: AnalyticsProps) {
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', 'G-6JZW63PDGC');
+        gtag('config', '${GA_ID}');
       `;
       document.head.appendChild(script2);
-
-      // Track page views on route changes
-      const handleRouteChange = () => {
-        if (window.gtag) {
-          window.gtag('config', 'G-6JZW63PDGC', {
-            page_path: window.location.pathname + window.location.search,
-          });
-        }
-      };
-
-      window.addEventListener('popstate', handleRouteChange);
-      return () => {
-        window.removeEventListener('popstate', handleRouteChange);
-      };
     }
   }, []);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('config', GA_ID, {
+        page_path: location.pathname + location.search,
+      });
+    }
+  }, [location.pathname, location.search]);
 
   return (
     <Helmet>
@@ -80,12 +86,58 @@ declare global {
 
 export function trackWhatsAppClick(ctaLocation: string) {
   if (typeof window === 'undefined') return;
-  if (window.gtag) {
-    window.gtag('event', 'whatsapp_click', { cta_location: ctaLocation });
-  }
+  sendEvent('whatsapp_click', { cta_location: ctaLocation });
   if (window.fbq) {
     window.fbq('track', 'Contact');
   }
+}
+
+export function trackEmailSubmit(language: string) {
+  sendEvent('email_submit', { form_location: 'footer', language });
+  if (window.fbq) {
+    window.fbq('track', 'Contact');
+  }
+}
+
+export function trackCalculadoraLink(loteNum?: number, precioUSD?: number) {
+  sendEvent('calculadora_link', { lote_num: loteNum, precio_usd: precioUSD });
+}
+
+export function trackCalculadoraSimulate(params: { loteNum?: number; precioUSD: number; plazo: number }) {
+  sendEvent('calculadora_simulate', {
+    lote_num: params.loteNum,
+    precio_usd: params.precioUSD,
+    plazo_meses: params.plazo,
+  });
+}
+
+export function trackScrollDepth(percent: number, page: string) {
+  sendEvent('scroll_depth', { percent, page });
+}
+
+export function useScrollDepthTracking() {
+  const location = useLocation();
+  const firedRef = useRef<Set<number>>(new Set());
+  useEffect(() => {
+    firedRef.current = new Set();
+    const thresholds = [25, 50, 75, 100];
+    const page = location.pathname || '/';
+    const handler = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (docHeight <= 0) return;
+      const pct = Math.round((scrollTop / docHeight) * 100);
+      for (const t of thresholds) {
+        if (pct >= t && !firedRef.current.has(t)) {
+          firedRef.current.add(t);
+          trackScrollDepth(t, page);
+        }
+      }
+    };
+    window.addEventListener('scroll', handler, { passive: true });
+    handler();
+    return () => window.removeEventListener('scroll', handler);
+  }, [location.pathname]);
 }
 
 

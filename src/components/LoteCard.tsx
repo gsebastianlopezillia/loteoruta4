@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Phone } from 'lucide-react';
 import { useCurrencyConversion } from '../hooks/useCurrencyConversion';
 import { Button } from './ui/button';
-import { trackWhatsAppClick } from './Analytics';
+import { trackWhatsAppClick, trackCalculadoraLink } from './Analytics';
 
 interface LoteCardProps {
   numero: number;
@@ -261,7 +261,7 @@ export function LoteCard({ numero, superficie, precioUSD, dimensiones, forma, es
                   {t('loteCard.reservar')}
                 </Button>
               </a>
-              <Link to={`/calculadora?lote=${numero}&precio=${precioUSD}`} className="inline-block">
+              <Link to={`/calculadora?lote=${numero}&precio=${precioUSD}`} className="inline-block" onClick={() => trackCalculadoraLink(numero, precioUSD)}>
                 <Button
                   variant="outline"
                   className="border-[#27AE60] text-[#27AE60] hover:bg-[#27AE60] hover:text-white"

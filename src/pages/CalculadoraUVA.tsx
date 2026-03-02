@@ -5,7 +5,7 @@ import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { ChevronLeft, Phone } from 'lucide-react';
-import { trackWhatsAppClick } from '../components/Analytics';
+import { trackWhatsAppClick, trackCalculadoraSimulate } from '../components/Analytics';
 
 const CORS_PROXY = 'https://corsproxy.io/?';
 const UVA_BCRA_URL = 'https://www.bcra.gob.ar/principales-variables-datos/?serie=7913&detalle=Unidad%20de%20Valor%20Adquisitivo%20%28UVA%29&detalle_sub=%28en%20pesos%20-con%20dos%20decimales-%2C%20base%2031.3.2016%3D14.05%29';
@@ -148,6 +148,7 @@ export function CalculadoraUVA() {
     }
     setTablaRows(rows);
     setShowResult(true);
+    trackCalculadoraSimulate({ loteNum: numeroLote ?? undefined, precioUSD, plazo: plazoNum });
   };
 
   useEffect(() => {

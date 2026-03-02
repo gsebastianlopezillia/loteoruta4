@@ -1,18 +1,20 @@
 import { useTranslation } from 'react-i18next';
 import { Phone, MapPin, FileCheck, Home, Droplets } from 'lucide-react';
 import { StickyNav } from './StickyNav';
-import { trackWhatsAppClick } from './Analytics';
+import { trackWhatsAppClick, trackEmailSubmit, useScrollDepthTracking } from './Analytics';
 import { CountdownTimer } from './CountdownTimer';
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const { t, i18n } = useTranslation();
   const showEmailForm = i18n.language === 'ru' || i18n.language === 'de';
+  useScrollDepthTracking();
 
   const handleEmailSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
     const email = (form.elements.namedItem('email') as HTMLInputElement)?.value;
     if (email) {
+      trackEmailSubmit(i18n.language);
       const subject = encodeURIComponent(`Consulta Loteo Ruta 4 - ${i18n.language}`);
       const body = encodeURIComponent(`Email: ${email}\n\nMensaje:`);
       window.location.href = `mailto:info@loteoruta4.com?subject=${subject}&body=${body}`;
