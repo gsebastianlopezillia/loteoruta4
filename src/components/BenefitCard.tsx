@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { LucideIcon } from 'lucide-react';
 
 interface BenefitCardProps {
@@ -9,6 +10,7 @@ interface BenefitCardProps {
 }
 
 export function BenefitCard({ icon: Icon, title, description, link, linkText }: BenefitCardProps) {
+  const { t } = useTranslation();
   return (
     <div className="h-full flex flex-col items-center text-center p-6 bg-[#1a1a1a] rounded-lg border border-[#333] hover:border-[#27AE60] transition-all duration-300 hover:scale-105">
       <div className="p-4 bg-[#27AE60]/20 rounded-full mb-4">
@@ -24,7 +26,7 @@ export function BenefitCard({ icon: Icon, title, description, link, linkText }: 
           className="mt-4 text-[#27AE60] hover:text-[#1e8449] underline transition-colors duration-300 text-sm"
           style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 400 }}
         >
-          {linkText || 'Ver más'}
+          {linkText ?? t('common.seeMore')}
         </a>
       )}
     </div>

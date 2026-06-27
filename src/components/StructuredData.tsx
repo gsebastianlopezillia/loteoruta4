@@ -1,4 +1,5 @@
 import { Helmet } from 'react-helmet-async';
+import { useTranslation } from 'react-i18next';
 
 interface StructuredDataProps {
   lotesDisponibles: number;
@@ -6,16 +7,16 @@ interface StructuredDataProps {
 }
 
 export function StructuredData({ lotesDisponibles, precioMinimoUSD = 5000 }: StructuredDataProps) {
+  const { t, i18n } = useTranslation();
   const baseUrl = 'https://loteoruta4.com';
-  
-  // Schema Organization
+
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": "Loteo Ruta 4",
+    "name": t('seo.siteName'),
     "url": baseUrl,
     "logo": `${baseUrl}/logo.png`,
-    "description": "Loteo Ruta 4 - Terrenos de 1000m² en Misiones con título, asfalto y agua",
+    "description": t('structuredData.organizationDescription'),
     "address": {
       "@type": "PostalAddress",
       "addressLocality": "Bonpland",
@@ -31,17 +32,16 @@ export function StructuredData({ lotesDisponibles, precioMinimoUSD = 5000 }: Str
       "@type": "ContactPoint",
       "telephone": "+54-376-416-5357",
       "contactType": "Sales",
-      "availableLanguage": "Spanish"
+      "availableLanguage": i18n.language === 'en' ? "English" : i18n.language === 'pt' ? "Portuguese" : i18n.language === 'de' ? "German" : i18n.language === 'ru' ? "Russian" : "Spanish"
     }
   };
 
-  // Schema LocalBusiness
   const localBusinessSchema = {
     "@context": "https://schema.org",
     "@type": "RealEstateAgent",
-    "name": "Loteo Ruta 4",
+    "name": t('seo.siteName'),
     "image": `${baseUrl}/assets/loteo_vista_general_1.jpeg`,
-    "description": "Venta de terrenos de 1000m² en Misiones. Lotes con título individual, acceso por Ruta 4 asfaltada, agua y servicios.",
+    "description": t('structuredData.localBusinessDescription'),
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "Ruta Nacional 4",
@@ -66,16 +66,15 @@ export function StructuredData({ lotesDisponibles, precioMinimoUSD = 5000 }: Str
     }
   };
 
-  // Schema Product (para los lotes disponibles)
   const productSchema = {
     "@context": "https://schema.org",
     "@type": "Product",
-    "name": "Terreno 1000m² - Loteo Ruta 4",
-    "description": "Terreno de 1000m² en Misiones con título individual, acceso por Ruta 4 asfaltada, agua y servicios. Ideal para construcción o inversión.",
+    "name": t('structuredData.productName'),
+    "description": t('structuredData.productDescription'),
     "image": `${baseUrl}/assets/loteo_vista_general_1.jpeg`,
     "brand": {
       "@type": "Brand",
-      "name": "Loteo Ruta 4"
+      "name": t('seo.siteName')
     },
     "offers": {
       "@type": "AggregateOffer",
@@ -87,133 +86,54 @@ export function StructuredData({ lotesDisponibles, precioMinimoUSD = 5000 }: Str
       "url": baseUrl
     },
     "category": "Real Estate",
+    "review": [
+      { "@type": "Review", "author": { "@type": "Person", "name": t('testimonials.1subtitle') }, "reviewBody": t('testimonials.1text'), "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5", "worstRating": "1" } },
+      { "@type": "Review", "author": { "@type": "Person", "name": t('testimonials.2subtitle') }, "reviewBody": t('testimonials.2text'), "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5", "worstRating": "1" } },
+      { "@type": "Review", "author": { "@type": "Person", "name": t('testimonials.3subtitle') }, "reviewBody": t('testimonials.3text'), "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5", "worstRating": "1" } },
+      { "@type": "Review", "author": { "@type": "Person", "name": t('testimonials.4subtitle') }, "reviewBody": t('testimonials.4text'), "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5", "worstRating": "1" } },
+      { "@type": "Review", "author": { "@type": "Person", "name": t('testimonials.5subtitle') }, "reviewBody": t('testimonials.5text'), "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5", "worstRating": "1" } }
+    ],
     "additionalProperty": [
-      {
-        "@type": "PropertyValue",
-        "name": "Superficie",
-        "value": "1000 m²"
-      },
-      {
-        "@type": "PropertyValue",
-        "name": "Ubicación",
-        "value": "Ruta Nacional 4, Bonpland, Misiones"
-      },
-      {
-        "@type": "PropertyValue",
-        "name": "Título",
-        "value": "Individual listo para escriturar"
-      },
-      {
-        "@type": "PropertyValue",
-        "name": "Servicios",
-        "value": "Agua, Luz, Internet (Starlink), Calles mantenidas"
-      }
+      { "@type": "PropertyValue", "name": t('structuredData.propertySurface'), "value": t('structuredData.propertySurfaceValue') },
+      { "@type": "PropertyValue", "name": t('structuredData.propertyLocation'), "value": t('structuredData.propertyLocationValue') },
+      { "@type": "PropertyValue", "name": t('structuredData.propertyTitle'), "value": t('structuredData.propertyTitleValue') },
+      { "@type": "PropertyValue", "name": t('structuredData.propertyServices'), "value": t('structuredData.propertyServicesValue') }
     ]
   };
 
-  // Schema FAQPage
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "¿Dónde quedan exactamente los lotes?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Quedan sobre Ruta Nacional 4, a 5 km de Bonpland y 15 km de Leandro N. Alem (por la escuela Almafuerte, ex Escuela 629). Acceso directo por ruta asfaltada y también por calle interna."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "¿Qué servicios tienen?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Agua: red vecinal de pozo. Luz: línea en ruta. Internet: excelente servicio con Starlink. Calles: mantenimiento de los caminos internos y la banquina."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "¿Tienen título individual listo para escriturar?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Sí, todos tienen título individual y están listos para transferir. Somos titulares directos."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "¿Cómo es el proceso de compra?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "1. Reserva con seña del 20% (se descuenta del total). 2. La escribanía solicita todos los certificados correspondientes. 3. Se escritura tras salida de certificados (general 15-20 días). Trabajamos con la escribanía Lombardi de Posadas."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "¿Qué formas de pago aceptan?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Contado en cualquier moneda: pesos argentinos, dólares, guaraníes, reales, USDT, Bitcoin, etc. No financiación por el momento."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "¿Es tranquilo y seguro el lugar?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Súper tranquilo y seguro. Es una zona rural muy familiar, hay varias casas alrededor, escuela enfrente, vecinos permanentes."
-        }
-      }
+      { "@type": "Question", "name": t('structuredData.faq1q'), "acceptedAnswer": { "@type": "Answer", "text": t('structuredData.faq1a') } },
+      { "@type": "Question", "name": t('structuredData.faq2q'), "acceptedAnswer": { "@type": "Answer", "text": t('structuredData.faq2a') } },
+      { "@type": "Question", "name": t('structuredData.faq3q'), "acceptedAnswer": { "@type": "Answer", "text": t('structuredData.faq3a') } },
+      { "@type": "Question", "name": t('structuredData.faq4q'), "acceptedAnswer": { "@type": "Answer", "text": t('structuredData.faq4a') } },
+      { "@type": "Question", "name": t('structuredData.faq5q'), "acceptedAnswer": { "@type": "Answer", "text": t('structuredData.faq5a') } },
+      { "@type": "Question", "name": t('structuredData.faq6q'), "acceptedAnswer": { "@type": "Answer", "text": t('structuredData.faq6a') } }
     ]
   };
 
-  // Schema BreadcrumbList
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     "itemListElement": [
-      {
-        "@type": "ListItem",
-        "position": 1,
-        "name": "Inicio",
-        "item": baseUrl
-      },
-      {
-        "@type": "ListItem",
-        "position": 2,
-        "name": "Lotes",
-        "item": `${baseUrl}#lotes`
-      },
-      {
-        "@type": "ListItem",
-        "position": 3,
-        "name": "Características",
-        "item": `${baseUrl}#caracteristicas`
-      },
-      {
-        "@type": "ListItem",
-        "position": 4,
-        "name": "Galería",
-        "item": `${baseUrl}#galeria`
-      },
-      {
-        "@type": "ListItem",
-        "position": 5,
-        "name": "FAQ",
-        "item": `${baseUrl}#faq`
-      }
+      { "@type": "ListItem", "position": 1, "name": t('structuredData.breadcrumbHome'), "item": baseUrl },
+      { "@type": "ListItem", "position": 2, "name": t('structuredData.breadcrumbLotes'), "item": `${baseUrl}#lotes` },
+      { "@type": "ListItem", "position": 3, "name": t('structuredData.breadcrumbCaracteristicas'), "item": `${baseUrl}#caracteristicas` },
+      { "@type": "ListItem", "position": 4, "name": t('structuredData.breadcrumbGaleria'), "item": `${baseUrl}#galeria` },
+      { "@type": "ListItem", "position": 5, "name": t('structuredData.breadcrumbFaq'), "item": `${baseUrl}#faq` }
     ]
   };
 
-  // Schema AggregateRating (basado en testimonios)
   const aggregateRatingSchema = {
     "@context": "https://schema.org",
     "@type": "Product",
-    "name": "Loteo Ruta 4",
+    "name": t('seo.siteName'),
     "aggregateRating": {
       "@type": "AggregateRating",
       "ratingValue": "5",
-      "reviewCount": "3",
+      "reviewCount": "5",
       "bestRating": "5",
       "worstRating": "1"
     }
@@ -221,26 +141,12 @@ export function StructuredData({ lotesDisponibles, precioMinimoUSD = 5000 }: Str
 
   return (
     <Helmet>
-      <script type="application/ld+json">
-        {JSON.stringify(organizationSchema)}
-      </script>
-      <script type="application/ld+json">
-        {JSON.stringify(localBusinessSchema)}
-      </script>
-      <script type="application/ld+json">
-        {JSON.stringify(productSchema)}
-      </script>
-      <script type="application/ld+json">
-        {JSON.stringify(faqSchema)}
-      </script>
-      <script type="application/ld+json">
-        {JSON.stringify(breadcrumbSchema)}
-      </script>
-      <script type="application/ld+json">
-        {JSON.stringify(aggregateRatingSchema)}
-      </script>
+      <script type="application/ld+json">{JSON.stringify(organizationSchema)}</script>
+      <script type="application/ld+json">{JSON.stringify(localBusinessSchema)}</script>
+      <script type="application/ld+json">{JSON.stringify(productSchema)}</script>
+      <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
+      <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
+      <script type="application/ld+json">{JSON.stringify(aggregateRatingSchema)}</script>
     </Helmet>
   );
 }
-
-

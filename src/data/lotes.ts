@@ -1,0 +1,16 @@
+export const lotes = [
+  { numero: 10, superficie: '1000 mts²', precio: 5000, dimensiones: '12x80', forma: 'rectangular' as const, estado: 'disponible' as const },
+  { numero: 11, superficie: '1000 mts²', precio: 5000, dimensiones: '12x80', forma: 'rectangular' as const, estado: 'vendido' as const },
+  { numero: 12, superficie: '1000 mts²', precio: 5000, dimensiones: '12x80', forma: 'rectangular' as const, estado: 'disponible' as const },
+  { numero: 13, superficie: '1000 mts²', precio: 5000, dimensiones: '12x80', forma: 'rectangular' as const, estado: 'disponible' as const },
+  { numero: 14, superficie: '1000 mts²', precio: 6000, dimensiones: '12x80', forma: 'rectangular' as const, estado: 'disponible' as const },
+  { numero: 1, superficie: '1000 mts²', precio: 5000, dimensiones: '17x20x17', forma: 'triangular' as const, estado: 'vendido' as const },
+  { numero: 2, superficie: '1000 mts²', precio: 5000, dimensiones: '12x80', forma: 'rectangular' as const, estado: 'vendido' as const },
+  { numero: 3, superficie: '1000 mts²', precio: 5000, dimensiones: '12x80', forma: 'rectangular' as const, estado: 'vendido' as const },
+  { numero: 4, superficie: '1000 mts²', precio: 5000, dimensiones: '12x80', forma: 'rectangular' as const, estado: 'vendido' as const },
+  { numero: 5, superficie: '1000 mts²', precio: 5000, dimensiones: '12x80', forma: 'rectangular' as const, estado: 'vendido' as const },
+  { numero: 6, superficie: '1000 mts²', precio: 5000, dimensiones: '12x80', forma: 'rectangular' as const, estado: 'vendido' as const },
+  { numero: 7, superficie: '1000 mts²', precio: 5000, dimensiones: '12x80', forma: 'rectangular' as const, estado: 'vendido' as const },
+  { numero: 8, superficie: '1000 mts²', precio: 5000, dimensiones: '12x80', forma: 'rectangular' as const, estado: 'vendido' as const },
+  { numero: 9, superficie: '1000 mts²', precio: 5000, dimensiones: '12x80', forma: 'rectangular' as const, estado: 'vendido' as const },
+];

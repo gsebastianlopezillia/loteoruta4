@@ -1212,10 +1212,6 @@
     padding-block: calc(var(--spacing) * 28);
   }
 
-  .py-32 {
-    padding-block: calc(var(--spacing) * 32);
-  }
-
   .py-\[24px\] {
     padding-block: 24px;
   }
